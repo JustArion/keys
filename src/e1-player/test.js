@@ -98,9 +98,11 @@ import { exit } from 'process';
         } catch (ex) 
         {
             console.error('Failed to parse decrypted JSON:', ex.message);
+            exit(6);
         }
     } catch (ex) 
     {
         console.error('Error:', ex.message);
+        exit(7);
     }
 })();
