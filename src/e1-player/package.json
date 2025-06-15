@@ -1,0 +1,24 @@
+{
+  "type": "module",
+  "name": "e1-player-deobf",
+  "version": "1.0.0",
+  "description": "Deobfuscator for e1-player",
+  "main": "deobfuscate.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JustArion/keys.git"
+  },
+  "author": "JustArion",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JustArion/keys/issues"
+  },
+  "homepage": "https://github.com/JustArion/keys#readme",
+  "dependencies": {
+    "@babel/core": "^7.27.4",
+    "crypto-js": "^4.2.0"
+  }
+}
