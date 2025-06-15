@@ -1,4 +1,4 @@
-name: E1 Player Runner
+name: E1 Runner
 
 on:
   schedule:
