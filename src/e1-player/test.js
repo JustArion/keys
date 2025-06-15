@@ -82,7 +82,7 @@ import { exit } from 'process';
         else
         {
             // D = "--217b4f4cbd4baeb5bdaeb43096f55c9095f7ab789a7498dda782473eaee2c791";
-            regex = /\w\s*=\s*".+?([a-f0-9]{64,})"/;
+            regex = /([a-f0-9]{64,})/;
 
             const keyMatch = deobfuscated.match(regex);
             if (keyMatch)
