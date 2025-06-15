@@ -92,8 +92,23 @@ import { exit } from 'process';
             }
             else
             {
-                console.error('Failed to find the required arrays in the deobfuscated content.');
-                exit(5);
+                //   O = ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"];
+                // ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"].map(hex => String.fromCharCode(parseInt(hex, 16))).join("")
+                regex = /\w+\s*=\s*(\[(?:"[0-9a-fA-F]+",?\s*){64}\])/;
+                const arrMatch = deobfuscated.match(regex);
+                if (arrMatch) {
+                    console.log('Deobfuscated content found via hex array extraction.');
+                    const hexArray = JSON.parse(arrMatch[1]);
+                    if (hexArray.length === 64) {
+                        key = hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
+                    } else {
+                        console.error('Found array does not have 64 elements.');
+                        exit(5);
+                    }
+                } else {
+                    console.error('Failed to find the required arrays in the deobfuscated content.');
+                    exit(5);
+                }
             }
         }
 
