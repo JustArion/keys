@@ -96,7 +96,8 @@ import { exit } from 'process';
                 // ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"].map(hex => String.fromCharCode(parseInt(hex, 16))).join("")
                 regex = /\w+\s*=\s*(\[(?:"[0-9a-fA-F]+",?\s*){64}\])/;
                 const arrMatch = deobfuscated.match(regex);
-                if (arrMatch) {
+                if (arrMatch) 
+                {
                     console.log('Deobfuscated content found via hex array extraction.');
                     const hexArray = JSON.parse(arrMatch[1]);
                     if (hexArray.length === 64) {
@@ -105,9 +106,27 @@ import { exit } from 'process';
                         console.error('Found array does not have 64 elements.');
                         exit(5);
                     }
-                } else {
-                    console.error('Failed to find the required arrays in the deobfuscated content.');
-                    exit(5);
+                } else 
+                {
+                    // a = [97, 56, 55, 55, 50, 100, 49, 57, 50, 53, 101, 53, 53, 48, 55, 56, 101, 53, 99, 101, 48, 57, 98, 101, 56, 98, 99, 54, 50, 101, 99, 54, 56, 99, 98, 100, 98, 53, 102, 102, 50, 56, 55, 52, 55, 52, 101, 54, 54, 101, 99, 49, 51, 49, 97, 100, 98, 52, 49, 48, 98, 51, 49, 98];
+                    // h = () => {
+                        // p.z9e.s2fm9gH();
+                        // if (p.q4.m8Eqosd()) {
+                        // return g8HqS["fromCharCode"](...a);
+                        // }
+                    regex = /\w+\s*=\s*(\[(?:\d+,?\s*)+\])/;
+                    const intArrayMatch = deobfuscated.match(regex);
+                    if (intArrayMatch)
+                    {
+                        console.log('Deobfuscated content found via integer array extraction.');
+                        const intArray = JSON.parse(intArrayMatch[1]);
+                        key = String.fromCharCode(...intArray);
+                    }
+                    else
+                    {
+                        console.error('Regexes did not match any known patterns for key extraction.');
+                        exit(5);
+                    }
                 }
             }
         }
