@@ -1,41 +1,62 @@
 import fs from 'fs';
 import { execSync } from 'child_process';
 import CryptoJS from 'crypto-js';
+import { exit } from 'process';
 
-const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0';
-const BASE_URL = 'https://megacloud.blog';
-const ID = 'Zg7AF9QDZPee';
-
-async function fetchUrl(url, additionalHeaders = {}) {
-    const headers = {
-        'X-Requested-With': 'XMLHttpRequest',
-        'User-Agent': USER_AGENT,
-        ...additionalHeaders
-    };
-    const res = await fetch(BASE_URL + url, { headers });
-    if (!res.ok) {
-        throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
-    }
-    return await res.text();
-}
 
 (async () => {
     try {
+
+        // {"type":"iframe","link":"https://megacloud.blog/embed-2/v2/e-1/Zg7AF9QDZPee?k=1","server":1,"sources":[],"tracks":[],"htmlGuide":""}
+        const resource = await fetch('https://hianime.to/ajax/v2/episode/sources?id=437666');
+
+        // We check if the type is iframe
+        const resourceData = await resource.json();
+        if (resourceData.type !== 'iframe') {
+            console.error('Resource type is not iframe:', resourceData);
+            exit(1);
+        }
+
+        // We Extract domain & ID from the link https://{domain}/embed-2/v2/e-1/{id}?k=1
+        const link = resourceData.link;
+        const resourceLinkMatch = link.match(/https:\/\/([^/]+)\/embed-2\/v2\/e-1\/([^?]+)/);
+        if (!resourceLinkMatch) {
+            console.error('Failed to extract domain and ID from link:', resourceData);
+            exit(2);
+        }
+        const baseUrl = `https://${resourceLinkMatch[1]}`;
+        const ID = resourceLinkMatch[2];
+
+        const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0';
+        async function fetchUrl(url, additionalHeaders = {}) {
+            const headers = {
+                'X-Requested-With': 'XMLHttpRequest',
+                'User-Agent': USER_AGENT,
+                ...additionalHeaders
+            };
+            const res = await fetch(baseUrl + url, { headers });
+            if (!res.ok) {
+                console.error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
+                exit(3);
+            }
+            return await res.text();
+        }
+
         // Fetch obfuscated JS
         const obfuscatedJS = await fetchUrl(`/js/player/a/v2/pro/embed-1.min.js?v=${Math.floor(Date.now() / 1000)}`);
         fs.writeFileSync('input.txt', obfuscatedJS);
-        console.log('JavaScript content retrieved and saved to input.txt');
+        console.debug('JavaScript content retrieved and saved to input.txt');
 
         // Fetch encrypted sources
-        const embedContentRaw = await fetchUrl(`/embed-2/v2/e-1/getSources?id=${ID}`, {
-            'referer': `${BASE_URL}/embed-2/v2/e-1/getSources?id=${ID}`
-        });
+        const embedContentRaw = await fetchUrl(`/embed-2/v2/e-1/getSources?id=${ID}`, { 'referer': `${baseUrl}/embed-2/v2/e-1/getSources?id=${ID}`});
         const embedContent = JSON.parse(embedContentRaw);
-        if (!embedContent.sources || !embedContent.sources.length) {
-            throw new Error('No sources found for the given ID.');
+        if (!embedContent.sources || !embedContent.sources.length) 
+        {
+            console.error('No sources found in embed content:', embedContent);
+            exit(4);
         }
         const encryptedBase64 = embedContent.sources
-        console.log('Encrypted Source:', encryptedBase64);
+        console.debug('Encrypted Source:', encryptedBase64);
 
         // Run deobfuscate.js (assumes it writes to output.js)
         execSync('node ./deobfuscate.js', { stdio: 'ignore' });
@@ -48,7 +69,8 @@ async function fetchUrl(url, additionalHeaders = {}) {
         const regex = /\w+\s*=\s*(\[(?:"[^"]*",?\s*)+\]);\s*\w+\s*=\s*(\[(?:\d+,?\s*)+\]);/;
         const match = deobfuscated.match(regex);
         if (!match) {
-            throw new Error('Failed to find the required arrays in the deobfuscated content.');
+            console.error('Failed to find the required arrays in the deobfuscated content.');
+            exit(5);
         }
         
         // It's all just valid json so we can parse it xdxd
@@ -59,15 +81,26 @@ async function fetchUrl(url, additionalHeaders = {}) {
 
         console.log('Key:', key);
 
-        // Decrypt
         const decrypted = CryptoJS.AES.decrypt(encryptedBase64, key);
-        try {
+        try 
+        {
+            // [
+            //     {
+            //         file: 'https://eh.netmagcdn.com:2228/hls-playback/15ce6980c5f72452daec69533e0fe253fec61e09b6acc81e4618c89e5bbe881bc6f076ded06ee2f19a8b199362e0655e8691980b7ba5cb2d82ebd371bfb2416df7b784318a671a84d47c27ca1ab5f61cf61e40a6057e033eba201458db44851e75c74b2a85f9567d5f6552e1210fc185420ea53bf50861414a98b2e064b8fc01eb19568ba4883f1ea28ce472ed9d64b9/master.m3u8',
+            //         type: 'hls'
+            //     }
+            // ]
             const plaintext = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+
             console.log('Decrypted JSON:', plaintext);
-        } catch (err) {
-            console.error('JSON NOT VALID');
+            
+            fs.writeFileSync('./data/decryption_key', key);
+        } catch (ex) 
+        {
+            console.error('Failed to parse decrypted JSON:', ex.message);
         }
-    } catch (err) {
-        console.error('Error:', err.message);
+    } catch (ex) 
+    {
+        console.error('Error:', ex.message);
     }
 })();
