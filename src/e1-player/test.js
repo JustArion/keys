@@ -62,74 +62,7 @@ import { exit } from 'process';
         execSync('node ./deobfuscate.js', { stdio: 'ignore' });
         const deobfuscated = fs.readFileSync('output.js', 'utf8');
 
-        // We're targeting something that looks like:
-        // K = ["542", "e3", "8129", "68c", "974c", "3", "9a11", "922a", "0b0", "89c", "6b", "7b", "b21c", "3295", "91", "7", "ec", "ffcf", "4a89", "a", "fcd3", "d2", "b"];
-        // n = [3, 16, 18, 14, 0, 19, 22, 9, 21, 7, 12, 13, 6, 1, 11, 2, 15, 4, 20, 17, 10, 5, 8];
-        let regex = /\w+\s*=\s*(\[(?:"[^"]*",?\s*)+\]);\s*\w+\s*=\s*(\[(?:\d+,?\s*)+\]);/;
-        const match = deobfuscated.match(regex);
-
-        let key = '';
-        if (match) 
-        {
-            console.log('Deobfuscated content found via string mapping.');
-
-            // It's all just valid json so we can parse it xdxd
-            const pattern = JSON.parse(match[1]);
-            const index = JSON.parse(match[2]);
-
-            key = index.map(i => pattern[i]).join('');
-        }
-        else
-        {
-            // D = "--217b4f4cbd4baeb5bdaeb43096f55c9095f7ab789a7498dda782473eaee2c791";
-            regex = /([a-f0-9]{64,})/;
-
-            const keyMatch = deobfuscated.match(regex);
-            if (keyMatch)
-            {
-                console.log('Deobfuscated content found via key extraction.');
-                key = keyMatch[1];
-            }
-            else
-            {
-                //   O = ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"];
-                // ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"].map(hex => String.fromCharCode(parseInt(hex, 16))).join("")
-                regex = /\w+\s*=\s*(\[(?:"[0-9a-fA-F]+",?\s*){64}\])/;
-                const arrMatch = deobfuscated.match(regex);
-                if (arrMatch) 
-                {
-                    console.log('Deobfuscated content found via hex array extraction.');
-                    const hexArray = JSON.parse(arrMatch[1]);
-                    if (hexArray.length === 64) {
-                        key = hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
-                    } else {
-                        console.error('Found array does not have 64 elements.');
-                        exit(5);
-                    }
-                } else 
-                {
-                    // a = [97, 56, 55, 55, 50, 100, 49, 57, 50, 53, 101, 53, 53, 48, 55, 56, 101, 53, 99, 101, 48, 57, 98, 101, 56, 98, 99, 54, 50, 101, 99, 54, 56, 99, 98, 100, 98, 53, 102, 102, 50, 56, 55, 52, 55, 52, 101, 54, 54, 101, 99, 49, 51, 49, 97, 100, 98, 52, 49, 48, 98, 51, 49, 98];
-                    // h = () => {
-                        // p.z9e.s2fm9gH();
-                        // if (p.q4.m8Eqosd()) {
-                        // return g8HqS["fromCharCode"](...a);
-                        // }
-                    regex = /\w+\s*=\s*(\[(?:\d+,?\s*)+\])/;
-                    const intArrayMatch = deobfuscated.match(regex);
-                    if (intArrayMatch)
-                    {
-                        console.log('Deobfuscated content found via integer array extraction.');
-                        const intArray = JSON.parse(intArrayMatch[1]);
-                        key = String.fromCharCode(...intArray);
-                    }
-                    else
-                    {
-                        console.error('Regexes did not match any known patterns for key extraction.');
-                        exit(5);
-                    }
-                }
-            }
-        }
+        const key = extractKey(deobfuscated);
 
         console.log('Key:', key);
 
@@ -158,3 +91,62 @@ import { exit } from 'process';
         exit(7);
     }
 })();
+
+function extractKey(deobfuscated) 
+{
+    // We're targeting something that looks like:
+    // K = ["542", "e3", "8129", "68c", "974c", "3", "9a11", "922a", "0b0", "89c", "6b", "7b", "b21c", "3295", "91", "7", "ec", "ffcf", "4a89", "a", "fcd3", "d2", "b"];
+    // n = [3, 16, 18, 14, 0, 19, 22, 9, 21, 7, 12, 13, 6, 1, 11, 2, 15, 4, 20, 17, 10, 5, 8];
+    const v1Regex = /\w+\s*=\s*(\[(?:"[^"]*",?\s*)+\]);\s*\w+\s*=\s*(\[(?:\d+,?\s*)+\]);/;
+    // D = "--217b4f4cbd4baeb5bdaeb43096f55c9095f7ab789a7498dda782473eaee2c791";
+    const v2Regex = /([a-f0-9]{64,})/;
+    //   O = ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"];
+    // ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"].map(hex => String.fromCharCode(parseInt(hex, 16))).join("")
+    const v3Regex = /\w+\s*=\s*(\[(?:"[0-9a-fA-F]+",?\s*){64}\])/;
+    // a = [97, 56, 55, 55, 50, 100, 49, 57, 50, 53, 101, 53, 53, 48, 55, 56, 101, 53, 99, 101, 48, 57, 98, 101, 56, 98, 99, 54, 50, 101, 99, 54, 56, 99, 98, 100, 98, 53, 102, 102, 50, 56, 55, 52, 55, 52, 101, 54, 54, 101, 99, 49, 51, 49, 97, 100, 98, 52, 49, 48, 98, 51, 49, 98];
+    // h = () => {
+        // p.z9e.s2fm9gH();
+        // if (p.q4.m8Eqosd()) {
+        // return g8HqS["fromCharCode"](...a);
+        // }
+    const v4Regex = /\w+\s*=\s*(\[(?:\d+,?\s*)+\])/;
+
+    // -----------------------------------------------------------------
+    const v1Match = deobfuscated.match(v1Regex);
+    if (v1Match) 
+    {
+        console.log('Deobfuscated content found via string mapping.');
+        const pattern = JSON.parse(v1Match[1]);
+        const index = JSON.parse(v1Match[2]);
+        return index.map(i => pattern[i]).join('');
+    }
+
+    const v2Match = deobfuscated.match(v2Regex);
+    if (v2Match) 
+    {
+        console.log('Deobfuscated content found via key extraction.');
+        return v2Match[1];
+    }
+
+    const v3Match = deobfuscated.match(v3Regex);
+    if (v3Match) 
+    {
+        console.log('Deobfuscated content found via hex array extraction.');
+        const hexArray = JSON.parse(v3Match[1]);
+        if (hexArray.length === 64) 
+            return hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
+         else 
+            console.error('Hex array does not have 64 elements.');
+    }
+
+    const v4Match = deobfuscated.match(v4Regex);
+    if (v4Match) 
+    {
+        console.log('Deobfuscated content found via integer array extraction.');
+        const intArray = JSON.parse(v4Match[1]);
+        return String.fromCharCode(...intArray);
+    }
+
+    console.error('Regexes did not match any known patterns for key extraction.');
+    exit(5);
+}
