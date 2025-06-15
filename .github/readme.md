@@ -1,5 +1,5 @@
+[![E1 Runner](https://github.com/JustArion/keys/actions/workflows/e1-player_runner.yml/badge.svg)](https://github.com/JustArion/keys/actions/workflows/e1-player_runner.yml)
 - E1 Player Key: [Direct Link](https://justarion.github.io/keys/src/e1-player/data/decryption_key)
-    -  ![E1 Runner](https://github.com/JustArion/keys/actions/workflows/e1-player_runner.yml/badge.svg)
 
 
 ### Credits
