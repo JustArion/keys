@@ -7,7 +7,7 @@ import { exit } from 'process';
 (async () => {
     try {
 
-        // {"type":"iframe","link":"https://megacloud.blog/embed-2/v2/e-1/Zg7AF9QDZPee?k=1","server":1,"sources":[],"tracks":[],"htmlGuide":""}
+        // {"type":"iframe","link":"https://example.link/embed-2/v2/e-1/Zg7AF9QDZPee?k=1","server":1,"sources":[],"tracks":[],"htmlGuide":""}
         const resource = await fetch('https://hianime.to/ajax/v2/episode/sources?id=437666');
 
         // We check if the type is iframe
@@ -86,7 +86,7 @@ import { exit } from 'process';
         {
             // [
             //     {
-            //         file: 'https://eh.netmagcdn.com:2228/hls-playback/15ce6980c5f72452daec69533e0fe253fec61e09b6acc81e4618c89e5bbe881bc6f076ded06ee2f19a8b199362e0655e8691980b7ba5cb2d82ebd371bfb2416df7b784318a671a84d47c27ca1ab5f61cf61e40a6057e033eba201458db44851e75c74b2a85f9567d5f6552e1210fc185420ea53bf50861414a98b2e064b8fc01eb19568ba4883f1ea28ce472ed9d64b9/master.m3u8',
+            //         file: 'https://eh.netmagcdn.com:2228/hls-playback/.../master.m3u8',
             //         type: 'hls'
             //     }
             // ]
