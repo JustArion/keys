@@ -66,18 +66,38 @@ import { exit } from 'process';
         // We're targeting something that looks like:
         // K = ["542", "e3", "8129", "68c", "974c", "3", "9a11", "922a", "0b0", "89c", "6b", "7b", "b21c", "3295", "91", "7", "ec", "ffcf", "4a89", "a", "fcd3", "d2", "b"];
         // n = [3, 16, 18, 14, 0, 19, 22, 9, 21, 7, 12, 13, 6, 1, 11, 2, 15, 4, 20, 17, 10, 5, 8];
-        const regex = /\w+\s*=\s*(\[(?:"[^"]*",?\s*)+\]);\s*\w+\s*=\s*(\[(?:\d+,?\s*)+\]);/;
+        let regex = /\w+\s*=\s*(\[(?:"[^"]*",?\s*)+\]);\s*\w+\s*=\s*(\[(?:\d+,?\s*)+\]);/;
         const match = deobfuscated.match(regex);
-        if (!match) {
-            console.error('Failed to find the required arrays in the deobfuscated content.');
-            exit(5);
-        }
-        
-        // It's all just valid json so we can parse it xdxd
-        const pattern = JSON.parse(match[1]);
-        const index = JSON.parse(match[2]);
 
-        let key = index.map(i => pattern[i]).join('');
+        let key = '';
+        if (match) 
+        {
+            console.log('Deobfuscated content found via string mapping.');
+
+            // It's all just valid json so we can parse it xdxd
+            const pattern = JSON.parse(match[1]);
+            const index = JSON.parse(match[2]);
+
+            key = index.map(i => pattern[i]).join('');
+        }
+        else
+        {
+            // D = "--217b4f4cbd4baeb5bdaeb43096f55c9095f7ab789a7498dda782473eaee2c791";
+            // check if a string is 64 characters long or more, slice from the end
+            regex = /\w\s*=\s*".+?([a-f0-9]{64,})"/;
+
+            const keyMatch = deobfuscated.match(regex);
+            if (keyMatch)
+            {
+                console.log('Deobfuscated content found via key extraction.');
+                key = keyMatch[1];
+            }
+            else
+            {
+                console.error('Failed to find the required arrays in the deobfuscated content.');
+                exit(5);
+            }
+        }
 
         console.log('Key:', key);
 
