@@ -161,7 +161,7 @@ function extractKey(deobfuscated)
         let v5Content = atob(v5Match[1]);
         if (v5Content.length == 64)
         {
-            console.log("Key found when checking for base64 strings longer");
+            console.log("Key found when checking for base64 strings longer than 64 characters");
             return v5Content;
         }
     }
