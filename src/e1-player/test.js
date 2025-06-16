@@ -111,11 +111,19 @@ function extractKey(deobfuscated)
         // }
     const v4Regex = /\w+\s*=\s*(\[(?:\d+,?\s*)+\])/;
 
+    // L = "YzAwZmZhY2NiNjZmODliODMzNGUyYzNmMTI3NDE4Mjg0ZGNjNThlMzUxN2Y2MWRiYmM2ZjZiZDk3Mzc1MGNhYw==";
+    // h = () => {
+    //   z.F6L.Z0lkAgs();
+    //   if (!z.t2.Q1kzx_R()) {
+    //     return W_cei(L);
+    //   }
+    const v5Regex = /((?:[A-Za-z0-9+/]{4}){16,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)/
+
     // -----------------------------------------------------------------
     const v1Match = deobfuscated.match(v1Regex);
     if (v1Match) 
     {
-        console.log('Deobfuscated content found via string mapping.');
+        console.log('Key found when checking for string mapping.');
         const pattern = JSON.parse(v1Match[1]);
         const index = JSON.parse(v1Match[2]);
         return index.map(i => pattern[i]).join('');
@@ -124,14 +132,14 @@ function extractKey(deobfuscated)
     const v2Match = deobfuscated.match(v2Regex);
     if (v2Match) 
     {
-        console.log('Deobfuscated content found via key extraction.');
+        console.log('Key found when checking for hex strings.');
         return v2Match[1];
     }
 
     const v3Match = deobfuscated.match(v3Regex);
     if (v3Match) 
     {
-        console.log('Deobfuscated content found via hex array extraction.');
+        console.log('Key found when checking for hex arrays.');
         const hexArray = JSON.parse(v3Match[1]);
         if (hexArray.length === 64) 
             return hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
@@ -142,9 +150,20 @@ function extractKey(deobfuscated)
     const v4Match = deobfuscated.match(v4Regex);
     if (v4Match) 
     {
-        console.log('Deobfuscated content found via integer array extraction.');
+        console.log('Key found when checking for int arrays.');
         const intArray = JSON.parse(v4Match[1]);
         return String.fromCharCode(...intArray);
+    }
+
+    const v5Match = deobfuscated.match(v5Regex);
+    if (v5Match)
+    {
+        let v5Content = atob(v5Match[1]);
+        if (v5Content.length == 64)
+        {
+            console.log("Key found when checking for base64 strings longer");
+            return v5Content;
+        }
     }
 
     console.error('Regexes did not match any known patterns for key extraction.');
