@@ -7,6 +7,8 @@ import { inlineWrapperFunctions } from './transformers/inlineProxiedFunctions.js
 import { solveStringArray } from './transformers/solveStringArray.js';
 import { solveStateMachine } from './transformers/solveStateMachine.js';
 import { inlineStringArray } from './transformers/inlineStringArray.js';
+import { inlineObjectAccess } from './transformers/inlineObjectAccess.js';
+import { inlineStaticAliases } from './transformers/inlineStaticAliases.js';
 
 try {
     let intermediateCode;
@@ -70,7 +72,35 @@ try {
     }
     intermediateCode = inlineStringArr.code;
     fs.writeFileSync('output.js', intermediateCode, 'utf-8');
-    console.log("Pass 4 complete.")
+    console.log("Pass 4 complete.");
+
+    // inline object access
+    console.log("--- Starting Pass 5: Inlining Object Access ---");
+    const inlineObjectAccessResult = babel.transformSync(intermediateCode, {
+        sourceType: "script",
+        plugins: [inlineObjectAccess],
+        code: true
+    });
+    if (!inlineObjectAccessResult || !inlineObjectAccessResult.code) {
+        throw new Error("Pass 5 (Inlining Object Access) failed to produce code.");
+    }
+    intermediateCode = inlineObjectAccessResult.code;
+    fs.writeFileSync('output.js', intermediateCode, 'utf-8');
+    console.log("Pass 5 complete.");
+
+    // inline static aliases (after object access inlining)
+    console.log("--- Starting Pass 6: Inlining Static Aliases ---");
+    const inlineStaticAliasesResult = babel.transformSync(intermediateCode, {
+        sourceType: "script",
+        plugins: [inlineStaticAliases],
+        code: true
+    });
+    if (!inlineStaticAliasesResult || !inlineStaticAliasesResult.code) {
+        throw new Error("Pass 6 (Inlining Static Aliases) failed to produce code.");
+    }
+    intermediateCode = inlineStaticAliasesResult.code;
+    fs.writeFileSync('output.js', intermediateCode, 'utf-8');
+    console.log("Pass 6 complete.");
 } catch (err) {
     console.error("\nAn error occurred during deobfuscation:", err);
 }
