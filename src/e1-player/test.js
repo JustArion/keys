@@ -13,7 +13,7 @@ import { exit } from 'process';
         // We check if the type is iframe
         const resourceData = await resource.json();
         if (resourceData.type !== 'iframe') {
-            console.error('Resource type is not iframe:', resourceData);
+            console.error('[!] Resource type is not iframe:', resourceData);
             exit(1);
         }
 
@@ -21,7 +21,7 @@ import { exit } from 'process';
         const link = resourceData.link;
         const resourceLinkMatch = link.match(/https:\/\/([^/]+)\/embed-2\/v2\/e-1\/([^?]+)/);
         if (!resourceLinkMatch) {
-            console.error('Failed to extract domain and ID from link:', resourceData);
+            console.error('[!] Failed to extract domain and ID from link:', resourceData);
             exit(2);
         }
         const baseUrl = `https://${resourceLinkMatch[1]}`;
@@ -36,7 +36,7 @@ import { exit } from 'process';
             };
             const res = await fetch(baseUrl + url, { headers });
             if (!res.ok) {
-                console.error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
+                console.error(`[!] Failed to fetch ${url}: ${res.status} ${res.statusText}`);
                 exit(3);
             }
             return await res.text();
@@ -45,28 +45,23 @@ import { exit } from 'process';
         // Fetch obfuscated JS
         const obfuscatedJS = await fetchUrl(`/js/player/a/v2/pro/embed-1.min.js?v=${Math.floor(Date.now() / 1000)}`);
         fs.writeFileSync('input.txt', obfuscatedJS);
-        console.debug('JavaScript content retrieved and saved to input.txt');
+        console.debug('[*] JavaScript content retrieved and saved to input.txt');
 
         // Fetch encrypted sources
         const embedContentRaw = await fetchUrl(`/embed-2/v2/e-1/getSources?id=${ID}`, { 'referer': `${baseUrl}/embed-2/v2/e-1/getSources?id=${ID}`});
         const embedContent = JSON.parse(embedContentRaw);
         if (!embedContent.sources || !embedContent.sources.length) 
         {
-            console.error('No sources found in embed content:', embedContent);
+            console.error('[!] No sources found in embed content:', embedContent);
             exit(4);
         }
         const encryptedBase64 = embedContent.sources
-        console.debug('Encrypted Source:', encryptedBase64);
+        console.debug('[*] Encrypted Source:', encryptedBase64);
 
         // Run deobfuscate.js (assumes it writes to output.js)
         execSync('node ./deobfuscate.js', { stdio: 'ignore' });
         const deobfuscated = fs.readFileSync('output.js', 'utf8');
 
-        const key = extractKey(deobfuscated);
-
-        console.log('Key:', key);
-
-        const decrypted = CryptoJS.AES.decrypt(encryptedBase64, key);
         try 
         {
             // [
@@ -75,24 +70,24 @@ import { exit } from 'process';
             //         type: 'hls'
             //     }
             // ]
-            const plaintext = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+            const [json, key] = extractKey(deobfuscated, encryptedBase64);
 
-            console.log('Decrypted JSON:', plaintext);
-            
+            console.log('[*] Decrypted JSON:', json);
+            console.log('\n[*] Decryption Key:', key);
             fs.writeFileSync('./data/decryption_key', key);
         } catch (ex) 
         {
-            console.error('Failed to parse decrypted JSON:', ex.message);
+            console.error(`[!] Failed to parse decrypted JSON: (${ex.message})`);
             exit(6);
         }
     } catch (ex) 
     {
-        console.error('Error:', ex.message);
+        console.error('[!] Error:', ex.message);
         exit(7);
     }
 })();
 
-function extractKey(deobfuscated) 
+function extractKey(deobfuscated, encryptedBase64Content) 
 {
     // Iterate over n, each element is an index into K. each index should not exceed K's length
     // K = ["542", "e3", "8129", "68c", "974c", "3", "9a11", "922a", "0b0", "89c", "6b", "7b", "b21c", "3295", "91", "7", "ec", "ffcf", "4a89", "a", "fcd3", "d2", "b"];
@@ -125,49 +120,99 @@ function extractKey(deobfuscated)
     const v1Match = deobfuscated.match(v1Regex);
     if (v1Match) 
     {
-        console.log('Key found when checking for string mapping.');
         const pattern = JSON.parse(v1Match[1]);
         const index = JSON.parse(v1Match[2]);
-        return index.map(i => pattern[i]).join('');
+        let key = index.map(i => pattern[i]).join('');
+        let result = tryDecryptJson(encryptedBase64Content, key);
+        if (result) 
+        {
+            console.log('[*] (V1) Key found when checking for string mapping.');
+            return [result, key];
+        }
     }
 
     const v2Match = deobfuscated.match(v2Regex);
     if (v2Match) 
     {
-        console.log('Key found when checking for hex strings.');
-        return v2Match[1];
+        let key = v2Match[1];
+        let result = tryDecryptJson(encryptedBase64Content, key);
+        if (result) 
+        {
+            console.log('[*] (V2) Key found when checking for hex strings.');
+            return [result, key];
+        }
+        else
+        {
+            key = v2Match[1].split('').reverse().join('');
+            result = tryDecryptJson(encryptedBase64Content, key);
+            if (result) 
+            {
+                console.log('[*] (V6) Key found when checking for reversed-hex strings.');
+                return [result, key];
+            }
+        }
     }
 
     const v3Match = deobfuscated.match(v3Regex);
     if (v3Match) 
     {
-        console.log('Key found when checking for hex arrays.');
         const hexArray = JSON.parse(v3Match[1]);
         if (hexArray.length === 64) 
-            return hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
-         else 
-            console.error('Hex array does not have 64 elements.');
+        {
+            let key = hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
+            let result = tryDecryptJson(encryptedBase64Content, key);
+            if (result) 
+            {
+                console.log('[*] (V3) Key found when checking for hex arrays.');
+                return [result, key];
+            }
+        }
+        else 
+            console.error('[!] Hex array does not have 64 elements.');
     }
 
     const v4Match = deobfuscated.match(v4Regex);
     if (v4Match) 
     {
-        console.log('Key found when checking for int arrays.');
         const intArray = JSON.parse(v4Match[1]);
-        return String.fromCharCode(...intArray);
+        let key = intArray.map(i => String.fromCharCode(i)).join('');
+        let result = tryDecryptJson(encryptedBase64Content, key);
+        if (result) 
+        {
+            console.log('[*] (V4) Key found when checking for int arrays.');
+            return [result, key];
+        }
     }
 
     const v5Match = deobfuscated.match(v5Regex);
     if (v5Match)
     {
-        let v5Content = atob(v5Match[1]);
-        if (v5Content.length == 64)
+        let key = atob(v5Match[1]);
+        if (key.length == 64)
         {
-            console.log("Key found when checking for base64 strings longer than 64 characters");
-            return v5Content;
+            let result = tryDecryptJson(encryptedBase64Content, key);
+            if (result) 
+            {
+                console.log('[*] (V5) Key found when checking for base64 strings longer than 64 characters.');
+                return [result, key];
+            }
         }
     }
 
-    console.error('Regexes did not match any known patterns for key extraction.');
+    console.error('[!] Regexes did not match any known patterns for key extraction.');
     exit(5);
+}
+
+function tryDecryptJson(encryptedBase64, key) 
+{
+    try
+    {
+        const decrypted = CryptoJS.AES.decrypt(encryptedBase64, key);
+        return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+    }
+    catch (ex)
+    {
+        console.error(`[!] Failed to decrypt json with key ${key}, (${ex.message})`);
+        return null;
+    }
 }
