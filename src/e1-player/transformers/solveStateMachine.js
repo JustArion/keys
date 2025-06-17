@@ -179,13 +179,18 @@ export const solveStateMachine = {
             return;
           }
 
-          const argValues = path.get('arguments').map(p => {
+          const argValues = [];
+          let allArgsConfident = true;
+          for (const p of path.get('arguments')) {
               const evalResult = p.evaluate();
               if (!evalResult.confident) {
-                  throw new Error(`Argument ${gen(p.node)} could not be evaluated confidently.`);
+                  console.warn(`[STATE-MACHINE] Argument ${gen(p.node)} could not be evaluated confidently. Skipping replacement for: ${gen(path.node)}`);
+                  allArgsConfident = false;
+                  break;
               }
-              return evalResult.value;
-          });
+              argValues.push(evalResult.value);
+          }
+          if (!allArgsConfident) return;
 
           try {
             const result = evaluateAstNode(logicNode, argValues);
