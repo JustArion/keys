@@ -43,62 +43,79 @@ import { exit } from 'process';
 
         // MegaCloud
         let [json, key] = await GetScriptKey(`https://${resourceLinkMatch[1]}`, PlayerType.ANIME, encryptedBase64);
-
-        console.log('[*] Decrypted JSON:', json);
-        console.log('[*] MegaCloud Anime Key:', key);
-
-        if (keys.MegaCloud.Anime.Key != key)
+        if (key != null)
         {
-            keys.MegaCloud.Anime = UpdateKey(key);
-            SaveKeys(keys);
+            console.log('[*] MegaCloud Anime Key:', key);
+            console.log('[*] Decrypted JSON:', json);
+
+            if (keys.MegaCloud.Anime.Key != key)
+            {
+                keys.MegaCloud.Anime = UpdateKey(key);
+                SaveKeys(keys);
+            }
         }
+
         // ---
         [json, key] = await GetScriptKey(`https://${resourceLinkMatch[1]}`, PlayerType.MOVIES);
-
-        console.log('[*] MegaCloud Movies Key:', key);
-
-        if (keys.MegaCloud.Movies.Key != key)
+        if (key != null)
         {
-            keys.MegaCloud.Movies = UpdateKey(key);
-            SaveKeys(keys);
+            console.log('[*] MegaCloud Movies Key:', key);
+
+            if (keys.MegaCloud.Movies.Key != key)
+            {
+                keys.MegaCloud.Movies = UpdateKey(key);
+                SaveKeys(keys);
+            }
         }
         // ------
         // VideoStr
         [json, key] = await GetScriptKey(`https://videostr.net`, PlayerType.ANIME);
-        console.log('[*] VideoStr Anime Key:', key);
-
-        if (keys.VideoStr.Anime.Key != key)
+        if (key != null)
         {
-            keys.VideoStr.Anime = UpdateKey(key);;
-            SaveKeys(keys);
+            console.log('[*] VideoStr Anime Key:', key);
+
+            if (keys.VideoStr.Anime.Key != key)
+            {
+                keys.VideoStr.Anime = UpdateKey(key);;
+                SaveKeys(keys);
+            }
         }
         // ---
         [json, key] = await GetScriptKey(`https://videostr.net`, PlayerType.MOVIES);
-        console.log('[*] VideoStr Movies Key:', key);
-
-        if (keys.VideoStr.Movies.Key != key)
+        if (key != null)
         {
-            keys.VideoStr.Movies = UpdateKey(key);
-            keys.VideoStr.LastUpdated = GetTimestamp();
-            SaveKeys(keys);
+            console.log('[*] VideoStr Movies Key:', key);
+
+            if (keys.VideoStr.Movies.Key != key)
+            {
+                keys.VideoStr.Movies = UpdateKey(key);
+                SaveKeys(keys);
+            }
         }
         // ------
         // CloudVidz
+        // TODO: Currently not working!
         // [json, key] = await GetScriptKey(`https://cloudvidz.net`, PlayerType.ANIME);
-        // console.log('[*] CloudVidz Anime Key:', key);
-        // if (keys.CloudVidz.Anime.Key != key)
+        // if (key != null)
         // {
-        //     keys.CloudVidz.Anime = UpdateKey(key);
-        //     SaveKeys(keys);
+        //     console.log('[*] CloudVidz Anime Key:', key);
+        //     if (keys.CloudVidz.Anime.Key != key)
+        //     {
+        //         keys.CloudVidz.Anime = UpdateKey(key);
+        //         SaveKeys(keys);
+        //     }
         // }
         // // ---
         [json, key] = await GetScriptKey(`https://cloudvidz.net`, PlayerType.MOVIES);
-        console.log('[*] CloudVidz Movies Key:', key);
-
-        if (keys.CloudVidz.Movies.Key != key)
+        if (key != null)
         {
-            keys.CloudVidz.Movies = UpdateKey(key);
-            SaveKeys(keys);
+            console.log('[*] CloudVidz Movies Key:', key);
+
+            if (keys.CloudVidz.Movies.Key != key)
+            {
+                keys.CloudVidz.Movies = UpdateKey(key);
+                SaveKeys(keys);
+            }
         }
         // ------
     } catch (ex) 
@@ -248,7 +265,6 @@ function GetScriptKeyOffline(encBase64 = null)
     } catch (ex) 
     {
         console.error(`[!] Failed to parse decrypted JSON: (${ex.message})`);
-        exit(6);
     }
 }
 async function GetScriptKey(baseUrl, playerType, encBase64 = null)
@@ -370,7 +386,7 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
     }
 
     console.error('[!] Regexes did not match any known patterns for key extraction.');
-    exit(5);
+    return [null, null];
 }
 
 function TryDecryptJson(encryptedb64, key, tryingReverse = false) 
