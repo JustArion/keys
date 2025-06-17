@@ -204,13 +204,17 @@ function TryDecryptJson(encryptedb64, key, tryingReverse = false)
     {
         if (tryingReverse) 
         {
-            console.error(`[!] Failed to decrypt json with key ${key} after reversing, (${ex.message})`);
+            // We un-reverse to get the original that was passed to the parent stack frame.
+            console.error(`[!] Failed to decrypt json with key ${Reverse(key)} after reversing, (${ex.message})`);
             return null;
         }
-        
+
         // If decryption fails, we try to reverse the key
-        key = key.split('').reverse().join('');
-        
-        return TryDecryptJson(encryptedb64, key, true);
+        return TryDecryptJson(encryptedb64, Reverse(key), true);
     }
+}
+
+function Reverse(str) 
+{
+    return str.split('').reverse().join('');
 }
