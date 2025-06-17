@@ -70,7 +70,7 @@ import { exit } from 'process';
             //         type: 'hls'
             //     }
             // ]
-            const [json, key] = extractKey(deobfuscated, encryptedBase64);
+            const [json, key] = ExtractKey(deobfuscated, encryptedBase64);
 
             console.log('[*] Decrypted JSON:', json);
             console.log('\n[*] Decryption Key:', key);
@@ -87,7 +87,7 @@ import { exit } from 'process';
     }
 })();
 
-function extractKey(deobfuscated, encryptedBase64Content) 
+function ExtractKey(deobfuscated, encryptedBase64Content) 
 {
     // Iterate over n, each element is an index into K. each index should not exceed K's length
     // K = ["542", "e3", "8129", "68c", "974c", "3", "9a11", "922a", "0b0", "89c", "6b", "7b", "b21c", "3295", "91", "7", "ec", "ffcf", "4a89", "a", "fcd3", "d2", "b"];
@@ -123,7 +123,7 @@ function extractKey(deobfuscated, encryptedBase64Content)
         const pattern = JSON.parse(v1Match[1]);
         const index = JSON.parse(v1Match[2]);
         let key = index.map(i => pattern[i]).join('');
-        let result = tryDecryptJson(encryptedBase64Content, key);
+        let result = TryDecryptJson(encryptedBase64Content, key);
         if (result) 
         {
             console.log('[*] (V1) Key found when checking for string mapping.');
@@ -135,21 +135,11 @@ function extractKey(deobfuscated, encryptedBase64Content)
     if (v2Match) 
     {
         let key = v2Match[1];
-        let result = tryDecryptJson(encryptedBase64Content, key);
+        let result = TryDecryptJson(encryptedBase64Content, key);
         if (result) 
         {
             console.log('[*] (V2) Key found when checking for hex strings.');
             return [result, key];
-        }
-        else
-        {
-            key = v2Match[1].split('').reverse().join('');
-            result = tryDecryptJson(encryptedBase64Content, key);
-            if (result) 
-            {
-                console.log('[*] (V6) Key found when checking for reversed-hex strings.');
-                return [result, key];
-            }
         }
     }
 
@@ -160,7 +150,7 @@ function extractKey(deobfuscated, encryptedBase64Content)
         if (hexArray.length === 64) 
         {
             let key = hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
-            let result = tryDecryptJson(encryptedBase64Content, key);
+            let result = TryDecryptJson(encryptedBase64Content, key);
             if (result) 
             {
                 console.log('[*] (V3) Key found when checking for hex arrays.');
@@ -176,7 +166,7 @@ function extractKey(deobfuscated, encryptedBase64Content)
     {
         const intArray = JSON.parse(v4Match[1]);
         let key = intArray.map(i => String.fromCharCode(i)).join('');
-        let result = tryDecryptJson(encryptedBase64Content, key);
+        let result = TryDecryptJson(encryptedBase64Content, key);
         if (result) 
         {
             console.log('[*] (V4) Key found when checking for int arrays.');
@@ -190,7 +180,7 @@ function extractKey(deobfuscated, encryptedBase64Content)
         let key = atob(v5Match[1]);
         if (key.length == 64)
         {
-            let result = tryDecryptJson(encryptedBase64Content, key);
+            let result = TryDecryptJson(encryptedBase64Content, key);
             if (result) 
             {
                 console.log('[*] (V5) Key found when checking for base64 strings longer than 64 characters.');
@@ -203,16 +193,24 @@ function extractKey(deobfuscated, encryptedBase64Content)
     exit(5);
 }
 
-function tryDecryptJson(encryptedBase64, key) 
+function TryDecryptJson(encryptedb64, key, tryingReverse = false) 
 {
     try
     {
-        const decrypted = CryptoJS.AES.decrypt(encryptedBase64, key);
+        const decrypted = CryptoJS.AES.decrypt(encryptedb64, key);
         return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
     }
     catch (ex)
     {
-        console.error(`[!] Failed to decrypt json with key ${key}, (${ex.message})`);
-        return null;
+        if (tryingReverse) 
+        {
+            console.error(`[!] Failed to decrypt json with key ${key} after reversing, (${ex.message})`);
+            return null;
+        }
+        
+        // If decryption fails, we try to reverse the key
+        key = key.split('').reverse().join('');
+        
+        return TryDecryptJson(encryptedb64, key, true);
     }
 }
