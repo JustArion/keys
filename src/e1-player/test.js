@@ -20,35 +20,16 @@ import { exit } from 'process';
         // We Extract domain & ID from the link https://{domain}/embed-2/v2/e-1/{id}?k=1
         const link = resourceData.link;
         const resourceLinkMatch = link.match(/https:\/\/([^/]+)\/embed-2\/v2\/e-1\/([^?]+)/);
-        if (!resourceLinkMatch) {
+        if (!resourceLinkMatch) 
+        {
             console.error('[!] Failed to extract domain and ID from link:', resourceData);
             exit(2);
         }
-        const baseUrl = `https://${resourceLinkMatch[1]}`;
-        const ID = resourceLinkMatch[2];
-
-        const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0';
-        async function fetchUrl(url, additionalHeaders = {}) {
-            const headers = {
-                'X-Requested-With': 'XMLHttpRequest',
-                'User-Agent': USER_AGENT,
-                ...additionalHeaders
-            };
-            const res = await fetch(baseUrl + url, { headers });
-            if (!res.ok) {
-                console.error(`[!] Failed to fetch ${url}: ${res.status} ${res.statusText}`);
-                exit(3);
-            }
-            return await res.text();
-        }
-
-        // Fetch obfuscated JS
-        const obfuscatedJS = await fetchUrl(`/js/player/a/v2/pro/embed-1.min.js?v=${Math.floor(Date.now() / 1000)}`);
-        fs.writeFileSync('input.txt', obfuscatedJS);
-        console.debug('[*] JavaScript content retrieved and saved to input.txt');
+        let baseUrl = `https://${resourceLinkMatch[1]}`;
+        const id = resourceLinkMatch[2];
 
         // Fetch encrypted sources
-        const embedContentRaw = await fetchUrl(`/embed-2/v2/e-1/getSources?id=${ID}`, { 'referer': `${baseUrl}/embed-2/v2/e-1/getSources?id=${ID}`});
+        const embedContentRaw = await FetchUrl(`${baseUrl}/embed-2/v2/e-1/getSources?id=${id}`, { 'referer': `${baseUrl}/embed-2/v2/e-1/getSources?id=${id}`});
         const embedContent = JSON.parse(embedContentRaw);
         if (!embedContent.sources || !embedContent.sources.length) 
         {
@@ -58,34 +39,231 @@ import { exit } from 'process';
         const encryptedBase64 = embedContent.sources
         console.debug('[*] Encrypted Source:', encryptedBase64);
 
-        // Run deobfuscate.js (assumes it writes to output.js)
-        execSync('node ./deobfuscate.js', { stdio: 'ignore' });
-        const deobfuscated = fs.readFileSync('output.js', 'utf8');
+        const keys = GetKeys();
 
-        try 
-        {
-            // [
-            //     {
-            //         file: 'https://eh.netmagcdn.com:2228/hls-playback/.../master.m3u8',
-            //         type: 'hls'
-            //     }
-            // ]
-            const [json, key] = ExtractKey(deobfuscated, encryptedBase64);
+        // MegaCloud
+        let [json, key] = await GetScriptKey(`https://${resourceLinkMatch[1]}`, PlayerType.ANIME, encryptedBase64);
 
-            console.log('[*] Decrypted JSON:', json);
-            console.log('\n[*] Decryption Key:', key);
-            fs.writeFileSync('./data/decryption_key', key);
-        } catch (ex) 
+        console.log('[*] Decrypted JSON:', json);
+        console.log('[*] MegaCloud Anime Key:', key);
+
+        if (keys.MegaCloud.Anime.Key != key)
         {
-            console.error(`[!] Failed to parse decrypted JSON: (${ex.message})`);
-            exit(6);
+            keys.MegaCloud.Anime = UpdateKey(key);
+            SaveKeys(keys);
         }
+        // ---
+        [json, key] = await GetScriptKey(`https://${resourceLinkMatch[1]}`, PlayerType.MOVIES);
+
+        console.log('[*] MegaCloud Movies Key:', key);
+
+        if (keys.MegaCloud.Movies.Key != key)
+        {
+            keys.MegaCloud.Movies = UpdateKey(key);
+            SaveKeys(keys);
+        }
+        // ------
+        // VideoStr
+        [json, key] = await GetScriptKey(`https://videostr.net`, PlayerType.ANIME);
+        console.log('[*] VideoStr Anime Key:', key);
+
+        if (keys.VideoStr.Anime.Key != key)
+        {
+            keys.VideoStr.Anime = UpdateKey(key);;
+            SaveKeys(keys);
+        }
+        // ---
+        [json, key] = await GetScriptKey(`https://videostr.net`, PlayerType.MOVIES);
+        console.log('[*] VideoStr Movies Key:', key);
+
+        if (keys.VideoStr.Movies.Key != key)
+        {
+            keys.VideoStr.Movies = UpdateKey(key);
+            keys.VideoStr.LastUpdated = GetTimestamp();
+            SaveKeys(keys);
+        }
+        // ------
+        // CloudVidz
+        // [json, key] = await GetScriptKey(`https://cloudvidz.net`, PlayerType.ANIME);
+        // console.log('[*] CloudVidz Anime Key:', key);
+        // if (keys.CloudVidz.Anime.Key != key)
+        // {
+        //     keys.CloudVidz.Anime = UpdateKey(key);
+        //     SaveKeys(keys);
+        // }
+        // // ---
+        [json, key] = await GetScriptKey(`https://cloudvidz.net`, PlayerType.MOVIES);
+        console.log('[*] CloudVidz Movies Key:', key);
+
+        if (keys.CloudVidz.Movies.Key != key)
+        {
+            keys.CloudVidz.Movies = UpdateKey(key);
+            SaveKeys(keys);
+        }
+        // ------
     } catch (ex) 
     {
-        console.error('[!] Error:', ex.message);
+        console.error(`[!] An error occurred: ${ex.message}`);
         exit(7);
     }
 })();
+
+function UpdateKey(key)
+{
+    return {
+        Key: key,
+        LastUpdated: GetTimestamp()
+    };
+}
+function SaveKeys(keys)
+{
+    fs.writeFileSync('./data/keys.json', JSON.stringify(keys, null, 2)); // Indented
+}
+function GetKeys()
+{
+    try
+    {
+        return JSON.parse(fs.readFileSync('./data/keys.json'));
+    }
+    catch 
+    {
+        return {
+            "MegaCloud": 
+            {
+                "Anime": 
+                {
+                    "Key": "",
+                    "LastUpdated":
+                    {
+                        "Timestamp": 0,
+                        "Time": ""
+                    }
+                },
+                "Movies": 
+                {
+                    "Key": "",
+                    "LastUpdated":
+                    {
+                        "Timestamp": 0,
+                        "Time": ""
+                    }
+                }
+            },
+            "VideoStr":
+            {
+                "Anime": 
+                {
+                    "Key": "",
+                    "LastUpdated":
+                    {
+                        "Timestamp": 0,
+                        "Time": ""
+                    }
+                },
+                "Movies": 
+                {
+                    "Key": "",
+                    "LastUpdated":
+                    {
+                        "Timestamp": 0,
+                        "Time": ""
+                    }
+                }
+            },
+            "CloudVidz":
+            {
+                "Anime": 
+                {
+                    "Key": "",
+                    "LastUpdated":
+                    {
+                        "Timestamp": 0,
+                        "Time": ""
+                    }
+                },
+                "Movies": 
+                {
+                    "Key": "",
+                    "LastUpdated":
+                    {
+                        "Timestamp": 0,
+                        "Time": ""
+                    }
+                }
+            }
+        }
+    }
+}
+
+function GetTimestamp()
+{
+    const timestamp = Date.now();
+    const date = new Date();
+    const time = date.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'UTC'
+    });
+
+    return {
+        Timestamp: timestamp,
+        Time: time
+    };
+}
+
+async function FetchUrl(url, additionalHeaders = {}) 
+{
+    const headers = 
+    {
+        'X-Requested-With': 'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0',
+        ...additionalHeaders
+    };
+    const res = await fetch(url, { headers });
+    if (!res.ok) {
+        console.error(`[!] Failed to fetch ${url}: ${res.status} ${res.statusText}`);
+        exit(3);
+    }
+    return await res.text();
+}
+
+function GetScriptKeyOffline(encBase64 = null)
+{
+    // Run deobfuscate.js (assumes it writes to output.js)
+    execSync('node ./deobfuscate.js', { stdio: 'ignore' });
+    const deobfuscated = fs.readFileSync('output.js', 'utf8');
+
+    try 
+    {
+        // [
+        //     {
+        //         file: 'https://eh.netmagcdn.com:2228/hls-playback/.../master.m3u8',
+        //         type: 'hls'
+        //     }
+        // ]
+        return ExtractKey(deobfuscated, encBase64);        
+    } catch (ex) 
+    {
+        console.error(`[!] Failed to parse decrypted JSON: (${ex.message})`);
+        exit(6);
+    }
+}
+async function GetScriptKey(baseUrl, playerType, encBase64 = null)
+{
+    // Fetch obfuscated JS
+    const obfuscatedJS = await FetchUrl(`${baseUrl}/js/player/${playerType}/v2/pro/embed-1.min.js?v=${Math.floor(Date.now() / 1000)}`);
+    fs.writeFileSync('input.txt', obfuscatedJS);
+
+    return GetScriptKeyOffline(encBase64);
+}
+
+const PlayerType = {
+    ANIME: 'a',
+    MOVIES: 'm',
+}
 
 function ExtractKey(deobfuscated, encryptedBase64Content) 
 {
@@ -98,7 +276,7 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
     const v2Regex = /([a-f0-9]{64,})/;
     // Each element is an int string that gets converted to hex, then back to a character
     // O = ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"];
-    const v3Regex = /\w+\s*=\s*(\[(?:"[0-9a-fA-F]+",?\s*){64}\])/;
+    const v3Regex = /\w+\s*=\s*(\[(?:"[0-9a-fA-F]+",?\s*){50,64}\])/;
     // Each element is an int that's just a character
     // a = [97, 56, 55, 55, 50, 100, 49, 57, 50, 53, 101, 53, 53, 48, 55, 56, 101, 53, 99, 101, 48, 57, 98, 101, 56, 98, 99, 54, 50, 101, 99, 54, 56, 99, 98, 100, 98, 53, 102, 102, 50, 56, 55, 52, 55, 52, 101, 54, 54, 101, 99, 49, 51, 49, 97, 100, 98, 52, 49, 48, 98, 51, 49, 98];
     // h = () => {
@@ -127,7 +305,7 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
         if (result) 
         {
             console.log('[*] (V1) Key found when checking for string mapping.');
-            return [result, key];
+            return result;
         }
     }
 
@@ -139,7 +317,7 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
         if (result) 
         {
             console.log('[*] (V2) Key found when checking for hex strings.');
-            return [result, key];
+            return result;
         }
     }
 
@@ -147,18 +325,20 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
     if (v3Match) 
     {
         const hexArray = JSON.parse(v3Match[1]);
-        if (hexArray.length === 64) 
-        {
+        // if (hexArray.length === 64) 
+        // {
+
+        // }
+        // else 
+        //     console.error('[!] Hex array does not have 64 elements.');
+
             let key = hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
             let result = TryDecryptJson(encryptedBase64Content, key);
             if (result) 
             {
                 console.log('[*] (V3) Key found when checking for hex arrays.');
-                return [result, key];
+                return result;
             }
-        }
-        else 
-            console.error('[!] Hex array does not have 64 elements.');
     }
 
     const v4Match = deobfuscated.match(v4Regex);
@@ -170,7 +350,7 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
         if (result) 
         {
             console.log('[*] (V4) Key found when checking for int arrays.');
-            return [result, key];
+            return result;
         }
     }
 
@@ -184,7 +364,7 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
             if (result) 
             {
                 console.log('[*] (V5) Key found when checking for base64 strings longer than 64 characters.');
-                return [result, key];
+                return result;
             }
         }
     }
@@ -195,10 +375,13 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
 
 function TryDecryptJson(encryptedb64, key, tryingReverse = false) 
 {
+    if (!encryptedb64)
+        return [null, key];
+
     try
     {
         const decrypted = CryptoJS.AES.decrypt(encryptedb64, key);
-        return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+        return [JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)), key];
     }
     catch (ex)
     {
@@ -210,7 +393,8 @@ function TryDecryptJson(encryptedb64, key, tryingReverse = false)
         }
 
         // If decryption fails, we try to reverse the key
-        return TryDecryptJson(encryptedb64, Reverse(key), true);
+        let reversedKey = Reverse(key);
+        return TryDecryptJson(encryptedb64, reversedKey, true);
     }
 }
 

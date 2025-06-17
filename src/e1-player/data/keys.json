@@ -1,0 +1,54 @@
+{
+  "MegaCloud": {
+    "Anime": {
+      "Key": "6b12ab1da2cea1fd7430b5aa7f12cdd972e94c39eb721a1ba197549800d9d70c",
+      "LastUpdated": {
+        "Timestamp": 1750142271456,
+        "Time": "June 17, 2025 at 06:37 AM"
+      }
+    },
+    "Movies": {
+      "Key": "fd2f7df05cefbfb727aec42e957fa5f1e4fcb21ee34e633012358c5816c04d26",
+      "LastUpdated": {
+        "Timestamp": 1750142274980,
+        "Time": "June 17, 2025 at 06:37 AM"
+      }
+    }
+  },
+  "VideoStr": {
+    "Anime": {
+      "Key": "6b12ab1da2cea1fd7430b5aa7f12cdd972e94c39eb721a1ba197549800d9d70c",
+      "LastUpdated": {
+        "Timestamp": 1750142278493,
+        "Time": "June 17, 2025 at 06:37 AM"
+      }
+    },
+    "Movies": {
+      "Key": "fd2f7df05cefbfb727aec42e957fa5f1e4fcb21ee34e633012358c5816c04d26",
+      "LastUpdated": {
+        "Timestamp": 1750142282018,
+        "Time": "June 17, 2025 at 06:38 AM"
+      }
+    },
+    "LastUpdated": {
+      "Timestamp": 1750142282019,
+      "Time": "June 17, 2025 at 06:38 AM"
+    }
+  },
+  "CloudVidz": {
+    "Anime": {
+      "Key": "",
+      "LastUpdated": {
+        "Timestamp": 0,
+        "Time": ""
+      }
+    },
+    "Movies": {
+      "Key": "rAbUQxl09ttO90s4IsxxFPqi7p8aspElrQyeyydiTrT11sy3JeJ",
+      "LastUpdated": {
+        "Timestamp": 1750142522008,
+        "Time": "June 17, 2025 at 06:42 AM"
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "MegaCloud": { "$ref": "#/definitions/provider" },
+    "VideoStr": { "$ref": "#/definitions/provider" },
+    "CloudVidz": { "$ref": "#/definitions/provider" }
+  },
+  "required": ["MegaCloud", "VideoStr", "CloudVidz"],
+  "definitions": {
+    "provider": {
+      "type": "object",
+      "properties": {
+        "Anime": { "$ref": "#/definitions/category" },
+        "Movies": { "$ref": "#/definitions/category" }
+      },
+      "required": ["Anime", "Movies"]
+    },
+    "category": {
+      "type": "object",
+      "properties": {
+        "Key": { "type": "string" },
+        "LastUpdated": {
+          "type": "object",
+          "properties": {
+            "Timestamp": { "type": "integer" },
+            "Time": { "type": "string" }
+          },
+          "required": ["Timestamp", "Time"]
+        }
+      },
+      "required": ["Key", "LastUpdated"]
+    }
+  }
+}
