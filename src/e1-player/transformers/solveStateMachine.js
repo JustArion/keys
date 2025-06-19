@@ -123,13 +123,33 @@ export const solveStateMachine = {
       }
       
       if (setterName && calculatorName && logicMap.size > 0) {
-        state.stateMachineInfo = { objectName: gen(path.node.left), setterName, calculatorName, logicMap };
-        console.log(`\n[STATE-MACHINE] State Machine fully parsed!`);
-        console.log(`   - Object Name: '${state.stateMachineInfo.objectName}'`);
-        console.log(`   - Setter Fn:   '${setterName}'`);
-        console.log(`   - Calculator Fn: '${calculatorName}'`);
-        console.log(`   - Logic map size: ${logicMap.size}\n`);
+      state.stateMachineInfo = { objectName: gen(path.node.left), setterName, calculatorName, logicMap };
+      console.log(`\n[STATE-MACHINE] State Machine fully parsed!`);
+      console.log(`   - Object Name: '${state.stateMachineInfo.objectName}'`);
+      console.log(`   - Setter Fn:   '${setterName}'`);
+      console.log(`   - Calculator Fn: '${calculatorName}'`);
+      console.log(`   - Logic map size: ${logicMap.size}\n`);
+
+        // Check for remaining references before removing declaration
+      const programPath = path.findParent(p => p.isProgram());
+      let hasRemainingRefs = false;
+      programPath.traverse({
+        CallExpression(callPath) {
+          const callee = callPath.get('callee');
+          if (!callee.isMemberExpression()) return;
+          const objectCode = gen(callee.node.object);
+          const propName = callee.node.property.name;
+          if (objectCode === gen(path.node.left) && (propName === setterName || propName === calculatorName)) {
+            hasRemainingRefs = true;
+            callPath.stop();
+          }
+        }
+      });
+      if (!hasRemainingRefs) {
         path.getStatementParent().remove();
+      } else {
+        console.warn(`[STATE-MACHINE] Not removing state machine declaration for '${gen(path.node.left)}' because references remain.`);
+      }
       } else {
         console.log(`  -> [FAIL] Could not identify both a setter and a calculator from the properties.`);
       }
