@@ -3,46 +3,19 @@ import { execSync } from 'child_process';
 import CryptoJS from 'crypto-js';
 import { exit } from 'process';
 
+const PlayerType = {
+    ANIME: 'a',
+    MOVIES: 'm',
+}
 
+var exitCode = 0;
 (async () => {
     try {
-
-        // {"type":"iframe","link":"https://example.link/embed-2/v2/e-1/Zg7AF9QDZPee?k=1","server":1,"sources":[],"tracks":[],"htmlGuide":""}
-        const resource = await fetch('https://hianime.to/ajax/v2/episode/sources?id=437666');
-
-        // We check if the type is iframe
-        const resourceData = await resource.json();
-        if (resourceData.type !== 'iframe') {
-            console.error('[!] Resource type is not iframe:', resourceData);
-            exit(1);
-        }
-
-        // We Extract domain & ID from the link https://{domain}/embed-2/v2/e-1/{id}?k=1
-        const link = resourceData.link;
-        const resourceLinkMatch = link.match(/https:\/\/([^/]+)\/embed-2\/v2\/e-1\/([^?]+)/);
-        if (!resourceLinkMatch) 
-        {
-            console.error('[!] Failed to extract domain and ID from link:', resourceData);
-            exit(2);
-        }
-        let baseUrl = `https://${resourceLinkMatch[1]}`;
-        const id = resourceLinkMatch[2];
-
-        // Fetch encrypted sources
-        const embedContentRaw = await FetchUrl(`${baseUrl}/embed-2/v2/e-1/getSources?id=${id}`, { 'referer': `${baseUrl}/embed-2/v2/e-1/getSources?id=${id}`});
-        const embedContent = JSON.parse(embedContentRaw);
-        if (!embedContent.sources || !embedContent.sources.length) 
-        {
-            console.error('[!] No sources found in embed content:', embedContent);
-            exit(4);
-        }
-        const encryptedBase64 = embedContent.sources
-        console.debug('[*] Encrypted Source:', encryptedBase64);
-
         const keys = GetKeys();
 
         // MegaCloud
-        let [json, key] = await GetScriptKey(`https://${resourceLinkMatch[1]}`, PlayerType.ANIME, encryptedBase64);
+        let [baseUrl, encryptedBase64] = await GetSource('https://hianime.to/ajax/v2/episode/sources?id=437666');
+        let [json, key] = await GetScriptKey(baseUrl, PlayerType.ANIME, encryptedBase64); // BaseUrl for this domain is unstable
         if (key != null)
         {
             console.log('[*] MegaCloud Anime Key:', key);
@@ -54,9 +27,8 @@ import { exit } from 'process';
                 SaveKeys(keys);
             }
         }
-
         // ---
-        [json, key] = await GetScriptKey(`https://${resourceLinkMatch[1]}`, PlayerType.MOVIES);
+        [json, key] = await GetScriptKey(baseUrl, PlayerType.MOVIES);
         if (key != null)
         {
             console.log('[*] MegaCloud Movies Key:', key);
@@ -69,7 +41,8 @@ import { exit } from 'process';
         }
         // ------
         // VideoStr
-        [json, key] = await GetScriptKey(`https://videostr.net`, PlayerType.ANIME);
+        [baseUrl, encryptedBase64] = await GetSource('https://hurawatchz.to/ajax/episode/sources/12369481');
+        [json, key] = await GetScriptKey(`https://videostr.net`, PlayerType.ANIME, encryptedBase64);
         if (key != null)
         {
             console.log('[*] VideoStr Anime Key:', key);
@@ -94,17 +67,16 @@ import { exit } from 'process';
         }
         // ------
         // CloudVidz
-        // TODO: Currently not working!
-        // [json, key] = await GetScriptKey(`https://cloudvidz.net`, PlayerType.ANIME);
-        // if (key != null)
-        // {
-        //     console.log('[*] CloudVidz Anime Key:', key);
-        //     if (keys.CloudVidz.Anime.Key != key)
-        //     {
-        //         keys.CloudVidz.Anime = UpdateKey(key);
-        //         SaveKeys(keys);
-        //     }
-        // }
+        [json, key] = await GetScriptKey(`https://cloudvidz.net`, PlayerType.ANIME);
+        if (key != null)
+        {
+            console.log('[*] CloudVidz Anime Key:', key);
+            if (keys.CloudVidz.Anime.Key != key)
+            {
+                keys.CloudVidz.Anime = UpdateKey(key);
+                SaveKeys(keys);
+            }
+        }
         // // ---
         [json, key] = await GetScriptKey(`https://cloudvidz.net`, PlayerType.MOVIES);
         if (key != null)
@@ -118,12 +90,60 @@ import { exit } from 'process';
             }
         }
         // ------
+        exit(exitCode);
     } catch (ex) 
     {
         console.error(`[!] An error occurred: ${ex.message}`);
-        exit(7);
+        throw ex;
     }
 })();
+
+async function GetSource(e1PlayerAjaxSource)
+{
+        // {"type":"iframe","link":"https://example.link/embed-2/v2/e-1/Zg7AF9QDZPee?k=1","server":1,"sources":[],"tracks":[],"htmlGuide":""}
+        const result = await fetch(e1PlayerAjaxSource);
+        // We check if the type is iframe
+        const resourceData = await result.json();
+        if (resourceData.type !== 'iframe') {
+            console.error('[!] Resource type is not iframe:', resourceData);
+            exitCode = 1;
+            return null;
+        }
+        // We Extract domain & ID from the link https://{domain}/embed-2/v2/e-1/{id}?k=1
+        const link = resourceData.link;
+        // const resourceLinkMatch = link.match(/https:\/\/([^/]+)\/embed-2\/v2\/e-1\/([^?]+)/);
+        const resourceLinkMatch = link.match(/https:\/\/([^/]+)\/embed-(\d)\/v2\/e-1\/([^?]+)/);
+
+        if (!resourceLinkMatch) 
+        {
+            console.error('[!] Failed to extract domain and ID from link:', resourceData);
+            exitCode = 2;
+            return [null, null];
+        }
+        const baseUrl = `https://${resourceLinkMatch[1]}`;
+        const version = resourceLinkMatch[2];
+        const id = resourceLinkMatch[3];
+
+        // Fetch encrypted sources
+        const embedContentRaw = await FetchUrl(`${baseUrl}/embed-${version}/v2/e-1/getSources?id=${id}`, { 'referer': `${baseUrl}/embed-2/v2/e-1/getSources?id=${id}`});
+        const embedContent = JSON.parse(embedContentRaw);
+        if (!embedContent.sources || !embedContent.sources.length) 
+        {
+            console.error('[!] No sources found in embed content:', embedContent);
+            exitCode = 3;
+            return [baseUrl, null];
+        }
+
+        if (embedContent.encrypted == false)
+        {
+            console.warn(`[!] Content from ${baseUrl} is not encrypted!`);
+            return [baseUrl, null];
+        }
+
+        const encryptedBase64 = embedContent.sources
+        console.debug(`[*] (${baseUrl}) Encrypted Source: ${encryptedBase64}`);
+        return [baseUrl, encryptedBase64];
+}
 
 function UpdateKey(key)
 {
@@ -276,11 +296,6 @@ async function GetScriptKey(baseUrl, playerType, encBase64 = null)
     return GetScriptKeyOffline(encBase64);
 }
 
-const PlayerType = {
-    ANIME: 'a',
-    MOVIES: 'm',
-}
-
 function ExtractKey(deobfuscated, encryptedBase64Content) 
 {
     // Iterate over n, each element is an index into K. each index should not exceed K's length
@@ -289,7 +304,7 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
     const v1Regex = /\w+\s*=\s*(\[(?:"[^"]*",?\s*)+\]);\s*\w+\s*=\s*(\[(?:\d+,?\s*)+\]);/;
     // Hex string that's 64 characters long
     // D = "--217b4f4cbd4baeb5bdaeb43096f55c9095f7ab789a7498dda782473eaee2c791";
-    const v2Regex = /([a-f0-9]{64,})/;
+    const v2Regex = /([a-f0-9]{50,64})/;
     // Each element is an int string that gets converted to hex, then back to a character
     // O = ["30", "30", "63", "61", "33", "65", "66", "30", "63", "61", "65", "62", "32", "65", "64", "31", "65", "65", "38", "31", "65", "36", "35", "36", "35", "64", "63", "36", "61", "61", "38", "34", "37", "32", "62", "35", "33", "35", "33", "36", "61", "34", "65", "62", "30", "65", "35", "34", "62", "32", "62", "39", "64", "31", "63", "63", "31", "64", "39", "38", "61", "30", "34", "64"];
     const v3Regex = /\w+\s*=\s*(\[(?:"[0-9a-fA-F]+",?\s*){50,64}\])/;
@@ -317,11 +332,14 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
         const pattern = JSON.parse(v1Match[1]);
         const index = JSON.parse(v1Match[2]);
         let key = index.map(i => pattern[i]).join('');
-        let result = TryDecryptJson(encryptedBase64Content, key);
-        if (result) 
+        if (IsAlphaNumeric(key))
         {
-            console.log('[*] (V1) Key found when checking for string mapping.');
-            return result;
+            let result = TryDecryptJson(encryptedBase64Content, key);
+            if (result) 
+            {
+                console.log('[*] (V1) Key found when checking for string mapping.');
+                return result;
+            }
         }
     }
 
@@ -329,11 +347,14 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
     if (v2Match) 
     {
         let key = v2Match[1];
-        let result = TryDecryptJson(encryptedBase64Content, key);
-        if (result) 
+        if (IsAlphaNumeric(key))
         {
-            console.log('[*] (V2) Key found when checking for hex strings.');
-            return result;
+            let result = TryDecryptJson(encryptedBase64Content, key);
+            if (result) 
+            {
+                console.log('[*] (V2) Key found when checking for hex strings.');
+                return result;
+            }
         }
     }
 
@@ -348,13 +369,16 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
         // else 
         //     console.error('[!] Hex array does not have 64 elements.');
 
-            let key = hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
+        let key = hexArray.map(hex => String.fromCharCode(parseInt(hex, 16))).join("");
+        if (IsAlphaNumeric(key))
+        {
             let result = TryDecryptJson(encryptedBase64Content, key);
             if (result) 
             {
                 console.log('[*] (V3) Key found when checking for hex arrays.');
                 return result;
             }
+        }
     }
 
     const v4Match = deobfuscated.match(v4Regex);
@@ -362,11 +386,14 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
     {
         const intArray = JSON.parse(v4Match[1]);
         let key = intArray.map(i => String.fromCharCode(i)).join('');
-        let result = TryDecryptJson(encryptedBase64Content, key);
-        if (result) 
+        if (IsAlphaNumeric(key))
         {
-            console.log('[*] (V4) Key found when checking for int arrays.');
-            return result;
+            let result = TryDecryptJson(encryptedBase64Content, key);
+            if (result) 
+            {
+                console.log('[*] (V4) Key found when checking for int arrays.');
+                return result;
+            }
         }
     }
 
@@ -374,18 +401,19 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
     if (v5Match)
     {
         let key = atob(v5Match[1]);
-        if (key.length == 64)
+        if (IsAlphaNumeric(key) && key.length >= 50)
         {
             let result = TryDecryptJson(encryptedBase64Content, key);
             if (result) 
             {
-                console.log('[*] (V5) Key found when checking for base64 strings longer than 64 characters.');
+                console.log('[*] (V5) Key found when checking for base64 strings longer than 49 characters.');
                 return result;
             }
         }
     }
 
     console.error('[!] Regexes did not match any known patterns for key extraction.');
+    exitCode = 1;
     return [null, null];
 }
 
@@ -417,4 +445,7 @@ function TryDecryptJson(encryptedb64, key, tryingReverse = false)
 function Reverse(str) 
 {
     return str.split('').reverse().join('');
+}
+function IsAlphaNumeric(str) {
+  return /^[0-9a-zA-Z]+$/.test(str);
 }
