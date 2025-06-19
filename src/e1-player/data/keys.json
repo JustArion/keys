@@ -1,33 +1,33 @@
 {
   "MegaCloud": {
     "Anime": {
-      "Key": "6b12ab1da2cea1fd7430b5aa7f12cdd972e94c39eb721a1ba197549800d9d70c",
+      "Key": "df9283388d4760e6e9a4a0cc73be13453b385acf38937227708c0f7ab67995ba",
       "LastUpdated": {
-        "Timestamp": 1750142271456,
-        "Time": "June 17, 2025 at 06:37 AM"
+        "Timestamp": 1750324410903,
+        "Time": "June 19, 2025 at 09:13 AM"
       }
     },
     "Movies": {
-      "Key": "fd2f7df05cefbfb727aec42e957fa5f1e4fcb21ee34e633012358c5816c04d26",
+      "Key": "31029c281091149997134e605123dca029e3923d80fe6f40104b545ee4b34cbe",
       "LastUpdated": {
-        "Timestamp": 1750142274980,
-        "Time": "June 17, 2025 at 06:37 AM"
+        "Timestamp": 1750339592684,
+        "Time": "June 19, 2025 at 01:26 PM"
       }
     }
   },
   "VideoStr": {
     "Anime": {
-      "Key": "6b12ab1da2cea1fd7430b5aa7f12cdd972e94c39eb721a1ba197549800d9d70c",
+      "Key": "df9283388d4760e6e9a4a0cc73be13453b385acf38937227708c0f7ab67995ba",
       "LastUpdated": {
-        "Timestamp": 1750142278493,
-        "Time": "June 17, 2025 at 06:37 AM"
+        "Timestamp": 1750324417702,
+        "Time": "June 19, 2025 at 09:13 AM"
       }
     },
     "Movies": {
-      "Key": "fd2f7df05cefbfb727aec42e957fa5f1e4fcb21ee34e633012358c5816c04d26",
+      "Key": "31029c281091149997134e605123dca029e3923d80fe6f40104b545ee4b34cbe",
       "LastUpdated": {
-        "Timestamp": 1750142282018,
-        "Time": "June 17, 2025 at 06:38 AM"
+        "Timestamp": 1750339599892,
+        "Time": "June 19, 2025 at 01:26 PM"
       }
     },
     "LastUpdated": {
@@ -44,10 +44,10 @@
       }
     },
     "Movies": {
-      "Key": "rAbUQxl09ttO90s4IsxxFPqi7p8aspElrQyeyydiTrT11sy3JeJ",
+      "Key": "naQnKjbOcIthBBcFY0N8cdAARiijY72j2h7DcDlXRDN2uMdP5IvDOFq9GY",
       "LastUpdated": {
-        "Timestamp": 1750142522008,
-        "Time": "June 17, 2025 at 06:42 AM"
+        "Timestamp": 1750304615092,
+        "Time": "June 19, 2025 at 03:43 AM"
       }
     }
   }
