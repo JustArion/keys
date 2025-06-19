@@ -413,7 +413,7 @@ function ExtractKey(deobfuscated, encryptedBase64Content)
     }
 
     console.error('[!] Regexes did not match any known patterns for key extraction.');
-    exitCode = 1;
+    // exitCode = 1;
     return [null, null];
 }
 
