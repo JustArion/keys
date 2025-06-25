@@ -1,0 +1,56 @@
+{
+  "megacloud": {
+    "anime": {
+      "key": "68ad85ffe2c283836112955b8edd09a731d1a935871ecd6b9201b255ac5d8361",
+      "hash": "50f997a5",
+      "last_updated": {
+        "timestamp": 1750805974438,
+        "time": "June 24, 2025 at 10:59 PM"
+      }
+    },
+    "movie": {
+      "key": "28a7e641d319bdb097e3cf2b10db67b36b1b557f827a0fbacdf9fd34c57c41d8",
+      "hash": "21b5ac67",
+      "last_updated": {
+        "timestamp": 1750805974634,
+        "time": "June 24, 2025 at 10:59 PM"
+      }
+    }
+  },
+  "videostr": {
+    "anime": {
+      "key": "63b5d0aa8db49b4c44cd58e762e9aea7f6bac13f932e2253452cccef26125385",
+      "hash": "fafe5765",
+      "last_updated": {
+        "timestamp": 1750805974832,
+        "time": "June 24, 2025 at 10:59 PM"
+      }
+    },
+    "movie": {
+      "key": "28a7e641d319bdb097e3cf2b10db67b36b1b557f827a0fbacdf9fd34c57c41d8",
+      "hash": "21b5ac67",
+      "last_updated": {
+        "timestamp": 1750805377874,
+        "time": "June 24, 2025 at 10:49 PM"
+      }
+    }
+  },
+  "cloudvidz": {
+    "anime": {
+      "key": "6Pb34AKEsi6xZEOQME5iWEF67RMin7kPZv6Yj",
+      "hash": "530185a7",
+      "last_updated": {
+        "timestamp": 1750805378083,
+        "time": "June 24, 2025 at 10:49 PM"
+      }
+    },
+    "movie": {
+      "key": "phPDXCyfkustLoKrneeWQxJ9zPhL5KyUQjR5WKJnA6nQMlu3GUx6FJ3Ks6hcX3Y",
+      "hash": "f4de6d1f",
+      "last_updated": {
+        "timestamp": 1750805378210,
+        "time": "June 24, 2025 at 10:49 PM"
+      }
+    }
+  }
+}

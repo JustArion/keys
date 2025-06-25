@@ -1,0 +1,243 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "megacloud": {
+      "type": "object",
+      "properties": {
+        "anime": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "hash": {
+              "type": "string",
+              "minLength": 1
+            },
+            "last_updated": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "number"
+                },
+                "time": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "timestamp",
+                "time"
+              ]
+            }
+          },
+          "required": [
+            "key",
+            "hash",
+            "last_updated"
+          ]
+        },
+        "movie": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "hash": {
+              "type": "string",
+              "minLength": 1
+            },
+            "last_updated": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "number"
+                },
+                "time": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "timestamp",
+                "time"
+              ]
+            }
+          },
+          "required": [
+            "key",
+            "hash",
+            "last_updated"
+          ]
+        }
+      },
+      "required": [
+        "anime",
+        "movie"
+      ]
+    },
+    "videostr": {
+      "type": "object",
+      "properties": {
+        "anime": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "hash": {
+              "type": "string",
+              "minLength": 1
+            },
+            "last_updated": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "number"
+                },
+                "time": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "timestamp",
+                "time"
+              ]
+            }
+          },
+          "required": [
+            "key",
+            "hash",
+            "last_updated"
+          ]
+        },
+        "movie": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "hash": {
+              "type": "string",
+              "minLength": 1
+            },
+            "last_updated": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "number"
+                },
+                "time": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "timestamp",
+                "time"
+              ]
+            }
+          },
+          "required": [
+            "key",
+            "hash",
+            "last_updated"
+          ]
+        }
+      },
+      "required": [
+        "anime",
+        "movie"
+      ]
+    },
+    "cloudvidz": {
+      "type": "object",
+      "properties": {
+        "anime": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "hash": {
+              "type": "string",
+              "minLength": 1
+            },
+            "last_updated": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "number"
+                },
+                "time": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "timestamp",
+                "time"
+              ]
+            }
+          },
+          "required": [
+            "key",
+            "hash",
+            "last_updated"
+          ]
+        },
+        "movie": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "hash": {
+              "type": "string",
+              "minLength": 1
+            },
+            "last_updated": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "number"
+                },
+                "time": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "timestamp",
+                "time"
+              ]
+            }
+          },
+          "required": [
+            "key",
+            "hash",
+            "last_updated"
+          ]
+        }
+      },
+      "required": [
+        "anime",
+        "movie"
+      ]
+    }
+  },
+  "required": [
+    "megacloud",
+    "videostr",
+    "cloudvidz"
+  ]
+}

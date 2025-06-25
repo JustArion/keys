@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - esbuild
+  - isolated-vm
+  - ivm-inspect

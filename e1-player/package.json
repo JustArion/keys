@@ -1,0 +1,21 @@
+{
+  "name": "e1-keys",
+  "version": "1.0.0",
+  "description": "Extracts 'API' keys for embed-1 players",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "crc-32": "^1.2.2",
+    "esbuild": "^0.25.5",
+    "isolated-vm": "^5.0.4",
+    "js-beautify": "^1.15.4"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^24.0.3",
+    "typescript": "^5.5.3"
+  },
+  "private": true
+}
