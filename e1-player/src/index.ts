@@ -11,7 +11,7 @@ const baseUrls = [
     'https://megacloud.blog',
     'https://videostr.net',
     'https://cloudvidz.net',
-    'https://cdnstreame.net'
+    'https://cdnstreame.net',
 ]
 async function main()
 {
@@ -87,7 +87,7 @@ function generateUrls() {
     return baseUrls.flatMap(baseUrl =>
         types.map(type => ({
             domain: getDomain(baseUrl),
-            url: `${baseUrl}/js/player/${type}/v2/pro/embed-1.min.js`,
+            url: `${baseUrl}/js/player/${type}/v2/pro/embed-1.min.js?v=${Date.now()}`,
             type: type === 'a' ? 'anime' : 'movie'
         }))
     )
