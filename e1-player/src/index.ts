@@ -63,7 +63,7 @@ async function main()
     info('executed in', (end - start) / 1000, 'sec')
 
     // info(API.keys)
-    // API.save()
+    API.save()
 }
 
 main()
