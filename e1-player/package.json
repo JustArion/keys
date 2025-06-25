@@ -10,7 +10,8 @@
     "crc-32": "^1.2.2",
     "esbuild": "^0.25.5",
     "isolated-vm": "^5.0.4",
-    "js-beautify": "^1.15.4"
+    "js-beautify": "^1.15.4",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
