@@ -3,7 +3,7 @@ import beautify from 'js-beautify'
 import { URL } from 'node:url'
 import ivm from 'isolated-vm'
 import fs from 'fs'
-import { info } from "./logging";
+import {error, info} from "./logging";
 
 
 export async function extractKeyFromUrl(url : string) : Promise<string>
@@ -15,9 +15,18 @@ export async function extractKeyFromUrl(url : string) : Promise<string>
 
     ctxGlobal.setSync('global', ctxGlobal.derefInto())
 
-    // ctxGlobal.getSync('console').setSync('log', (...args: any[]) => {
-    //     console.log(...args)
-    // });
+    ctxGlobal.getSync('global').setSync('atob', (data : string) => {
+        const atobData = atob(data)
+        // info('[ATOB]', data, '->', atobData)
+        return atobData
+    })
+
+    ctxGlobal.getSync('console').setSync('log', (...args: any[]) => {
+        // info(...args)
+    })
+    ctxGlobal.getSync('console').setSync('error', (...args: any[]) => {
+        error(...args)
+    })
 
 
     // const cryptoJSUrl = URL.parse('https://megacloud.blog/js/crypto-js.js')
@@ -34,24 +43,31 @@ export async function extractKeyFromUrl(url : string) : Promise<string>
 
     let cjsKey = ''
     ctxGlobal.getSync('CryptoJS').getSync('AES').setSync('decrypt', (cipherText : string, key : string) => {
-        // console.log(`Found key for ${path.hostname} ${key}`)
+        console.log(`Found key for ${path.hostname} ${key}`)
         cjsKey = key
         isolate.dispose()
     })
 
     try
     {
+        // await runFromUrl(`https://megacloud.blog/js/player/m/v2/pro/embed-1.min.js?v=${Date.now()}`, isolate, context)
+        // await runFromFile('./remote/embed.js', isolate, context)
+        // await runFromUrl(`https://cloudvidz.net/js/player/m/v2/pro/embed-1.min.js?v=${Date.now()}`, isolate, context)
+
         await runFromUrl(url, isolate, context)
-        // await runFromUrl('https://megacloud.blog/js/player/a/v2/pro/embed-1.min.js', isolate, context)
-        // await runFromUrl('https://cloudvidz.net/js/player/m/v2/pro/embed-1.min.js', isolate, context)
-        // await runFromFile('./output.js', isolate, context)
     }
     catch(e)
     {
         // @ts-ignore
         if (e.message !== 'Isolate was disposed during execution')
+        {
+            console.error('Error from ', url)
             throw e;
+        }
     }
+
+    if (cjsKey === '')
+        error('Failed to get key for', url)
 
     return cjsKey
 }
