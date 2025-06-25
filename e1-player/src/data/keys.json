@@ -1,11 +1,11 @@
 {
   "megacloud": {
     "anime": {
-      "key": "fe309c1f558f529626459c628a3fbcfd694f39f3a3414b7f33f56058771e0ad3",
-      "hash": "d566688e",
+      "key": "68cec4a8991542ab89cd2922ab21c32959a11e37b81297974cfcd3ffcf6b30b0",
+      "hash": "6ce821c3",
       "last_updated": {
-        "timestamp": 1750819302188,
-        "time": "June 25, 2025 at 02:41 AM"
+        "timestamp": 1750835636855,
+        "time": "June 25, 2025 at 07:13 AM"
       }
     },
     "movie": {
@@ -55,19 +55,19 @@
   },
   "cdnstreame": {
     "anime": {
-      "key": "6Pb34AKEsi6xZEOQME5iWEF67RMin7kPZv6Yj",
-      "hash": "530185a7",
+      "key": "ZujyQfQQ5qtKdOqrU5nBWEUcVxHUFdiXv2z5lhcyQ3b5Qf4I2n1TPM2pZr5qlPwz",
+      "hash": "5fe65a66",
       "last_updated": {
-        "timestamp": 1750820532528,
-        "time": "June 25, 2025 at 03:02 AM"
+        "timestamp": 1750835637021,
+        "time": "June 25, 2025 at 07:13 AM"
       }
     },
     "movie": {
-      "key": "TIGHilT8R1N8zSx2M1MoMMOnPC1syd6n5cFmp",
-      "hash": "a402bb4c",
+      "key": "1d2ec7418c84afcff6c4a7c75d31342206f1d24f963c5c1ae09cdc509e1f3c3d",
+      "hash": "89e9d8b2",
       "last_updated": {
-        "timestamp": 1750832372854,
-        "time": "June 25, 2025 at 06:19 AM"
+        "timestamp": 1750835637030,
+        "time": "June 25, 2025 at 07:13 AM"
       }
     }
   }
