@@ -132,3 +132,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 e1-player/src/remote/embed.js
+e1-player/src/test.ts
