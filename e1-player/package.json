@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "crc-32": "^1.2.2",
+    "crypto-js": "^4.2.0",
     "esbuild": "^0.25.5",
     "isolated-vm": "^5.0.4",
     "js-beautify": "^1.15.4",
