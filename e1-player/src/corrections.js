@@ -1,4 +1,9 @@
-﻿jwplayer = createDummy()
+﻿jwplayer = shroud(function () {
+    return {
+        setup: shroudDummy(),
+        on: shroudDummy()
+    }
+})
 
 performance = { now: shroud(function() { return Date.now(); }) };
 attachEvent = shroudDummy()
@@ -11,19 +16,22 @@ window = {
     performance: performance,
     attachEvent: attachEvent,
     document: document,
-    playerSettings: {
-        autoPlay: '',
-    },
+    playerSettings: {"time":0,"autoPlay":0,"playOriginalAudio":0,"autoSkipIntro":0,"vast":0},
     CryptoJS: CryptoJS,
 }
+
+JSON = shroud({})
+JSON.parse = shroud(function (... args) {
+    console.log('json args', ... args)
+})
 
 setTimeout = shroudDummy()
 clearTimeout = shroudDummy()
 
+
 const jqData = {
     "#megacloud-player": {
         id: '',
-        realid: '',
     }
 }
 $ = function(selector)
@@ -31,7 +39,6 @@ $ = function(selector)
     if (typeof selector !== "string") {
         return {
             on: () => {},
-            ready: fn => fn()
         };
     }
 
@@ -45,8 +52,14 @@ $ = function(selector)
 }
 $.get = function(url, callback) {
     console.log(`[*][AJAX] -> ${url}`);
-    const mockResponse = { "sources": "", "encrypted": true}
     if (typeof callback === 'function') {
+
+        let mockResponse = ''
+        if (url === '/embed-1/e-1/banners')
+            mockResponse = {"status":true,"data":[]}
+        else
+            mockResponse = {"sources":"","encrypted":true}
+
         callback(mockResponse);
     }
 };
@@ -67,7 +80,9 @@ MobileDetect.prototype.isMobile = function() {
 
 function createDummy()
 {
-    return function () {}
+    const x = function () {}
+    x.toString = function() { return 'dumm'}
+    return x;
 }
 
 function shroudDummy()
