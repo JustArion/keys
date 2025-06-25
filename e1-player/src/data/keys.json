@@ -52,5 +52,23 @@
         "time": "June 25, 2025 at 02:31 AM"
       }
     }
+  },
+  "cdnstreame": {
+    "anime": {
+      "key": "6Pb34AKEsi6xZEOQME5iWEF67RMin7kPZv6Yj",
+      "hash": "530185a7",
+      "last_updated": {
+        "timestamp": 1750820532528,
+        "time": "June 25, 2025 at 03:02 AM"
+      }
+    },
+    "movie": {
+      "key": "7505dc5acd52374078eba7be17e3227ccee6ade0c624e2bc280be4edec58394c",
+      "hash": "f67477f3",
+      "last_updated": {
+        "timestamp": 1750820532266,
+        "time": "June 25, 2025 at 03:02 AM"
+      }
+    }
   }
 }
