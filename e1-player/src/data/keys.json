@@ -37,37 +37,37 @@
   },
   "cloudvidz": {
     "anime": {
-      "key": "rIB3KqrtBLGMGCjnudE9N9CPg1m4VjLFnHrNdOIzhc2",
-      "hash": "5d206d49",
+      "key": "0lLzFWTfTogM5i399U9NPzQsL1LAzbBJCqGTqZGE8VtMUGUpIFO",
+      "hash": "2fb791d4",
       "last_updated": {
-        "timestamp": 1750918739000,
-        "time": "June 26, 2025 at 06:18 AM"
+        "timestamp": 1750944473605,
+        "time": "June 26, 2025 at 01:27 PM"
       }
     },
     "movie": {
-      "key": "8WscozyvTt8hrNizI0beyxlGLgscSNBVkuRMwm",
-      "hash": "af7e0e01",
+      "key": "67mkSHHgjO1d6WaYNeYKs2qkGl94hzTVOepShF6FaMSySe9",
+      "hash": "157c6102",
       "last_updated": {
-        "timestamp": 1750922010300,
-        "time": "June 26, 2025 at 07:13 AM"
+        "timestamp": 1750944473386,
+        "time": "June 26, 2025 at 01:27 PM"
       }
     }
   },
   "cdnstreame": {
     "anime": {
-      "key": "rIB3KqrtBLGMGCjnudE9N9CPg1m4VjLFnHrNdOIzhc2",
-      "hash": "5d206d49",
+      "key": "0lLzFWTfTogM5i399U9NPzQsL1LAzbBJCqGTqZGE8VtMUGUpIFO",
+      "hash": "2fb791d4",
       "last_updated": {
-        "timestamp": 1750918739113,
-        "time": "June 26, 2025 at 06:18 AM"
+        "timestamp": 1750944473596,
+        "time": "June 26, 2025 at 01:27 PM"
       }
     },
     "movie": {
-      "key": "8WscozyvTt8hrNizI0beyxlGLgscSNBVkuRMwm",
-      "hash": "af7e0e01",
+      "key": "67mkSHHgjO1d6WaYNeYKs2qkGl94hzTVOepShF6FaMSySe9",
+      "hash": "157c6102",
       "last_updated": {
-        "timestamp": 1750922010330,
-        "time": "June 26, 2025 at 07:13 AM"
+        "timestamp": 1750944473595,
+        "time": "June 26, 2025 at 01:27 PM"
       }
     }
   }
