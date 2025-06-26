@@ -1,37 +1,37 @@
 {
   "megacloud": {
     "anime": {
-      "key": "fa98f3408bb37ba893c7692402db261899e2614b1d44760552b5620cd5e0533f",
-      "hash": "235a4451",
+      "key": "b28747a4b666654a1cb6282502dd610715f89584100f7b5e71d065f14acca5a2",
+      "hash": "bd69e1e4",
       "last_updated": {
-        "timestamp": 1750899688281,
-        "time": "June 26, 2025 at 01:01 AM"
+        "timestamp": 1750922010375,
+        "time": "June 26, 2025 at 07:13 AM"
       }
     },
     "movie": {
-      "key": "4ff7595fb975aaaab77ee63238a03e8d0d63222f081d508eba584eeeb6d8c558",
-      "hash": "93835a5f",
+      "key": "71ec58f1df1d8aedb1eeb1fece71f671e50928e5db5c9129b623f417bcb20395",
+      "hash": "f22c118b",
       "last_updated": {
-        "timestamp": 1750899688481,
-        "time": "June 26, 2025 at 01:01 AM"
+        "timestamp": 1750922009868,
+        "time": "June 26, 2025 at 07:13 AM"
       }
     }
   },
   "videostr": {
     "anime": {
-      "key": "fa98f3408bb37ba893c7692402db261899e2614b1d44760552b5620cd5e0533f",
-      "hash": "235a4451",
+      "key": "b28747a4b666654a1cb6282502dd610715f89584100f7b5e71d065f14acca5a2",
+      "hash": "bd69e1e4",
       "last_updated": {
-        "timestamp": 1750899687664,
-        "time": "June 26, 2025 at 01:01 AM"
+        "timestamp": 1750922010369,
+        "time": "June 26, 2025 at 07:13 AM"
       }
     },
     "movie": {
-      "key": "4ff7595fb975aaaab77ee63238a03e8d0d63222f081d508eba584eeeb6d8c558",
-      "hash": "93835a5f",
+      "key": "71ec58f1df1d8aedb1eeb1fece71f671e50928e5db5c9129b623f417bcb20395",
+      "hash": "f22c118b",
       "last_updated": {
-        "timestamp": 1750899688389,
-        "time": "June 26, 2025 at 01:01 AM"
+        "timestamp": 1750922010332,
+        "time": "June 26, 2025 at 07:13 AM"
       }
     }
   },
@@ -45,11 +45,11 @@
       }
     },
     "movie": {
-      "key": "1wdjbVKjlxaNQIZKVwIZid8NgX9y0W3VIyTO68rAE9o4L611qPyDVFqXS6Mrvj",
-      "hash": "4356dab3",
+      "key": "8WscozyvTt8hrNizI0beyxlGLgscSNBVkuRMwm",
+      "hash": "af7e0e01",
       "last_updated": {
-        "timestamp": 1750899688282,
-        "time": "June 26, 2025 at 01:01 AM"
+        "timestamp": 1750922010300,
+        "time": "June 26, 2025 at 07:13 AM"
       }
     }
   },
@@ -63,11 +63,11 @@
       }
     },
     "movie": {
-      "key": "1wdjbVKjlxaNQIZKVwIZid8NgX9y0W3VIyTO68rAE9o4L611qPyDVFqXS6Mrvj",
-      "hash": "4356dab3",
+      "key": "8WscozyvTt8hrNizI0beyxlGLgscSNBVkuRMwm",
+      "hash": "af7e0e01",
       "last_updated": {
-        "timestamp": 1750899688391,
-        "time": "June 26, 2025 at 01:01 AM"
+        "timestamp": 1750922010330,
+        "time": "June 26, 2025 at 07:13 AM"
       }
     }
   }
