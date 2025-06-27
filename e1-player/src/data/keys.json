@@ -1,11 +1,11 @@
 {
   "megacloud": {
     "anime": {
-      "key": "b09f18b647b5a9c2a532db4d58fbb0e89c4cabc822dff6e8b5ad1c6108900adb",
-      "hash": "b32ed686",
+      "key": "19030625a6fe1bd8c3c49e2a41cafa9eaa1b00717cb51df375f42b3b2cdfb01b",
+      "hash": "816a4290",
       "last_updated": {
-        "timestamp": 1750986135501,
-        "time": "June 27, 2025 at 01:02 AM"
+        "timestamp": 1751001255055,
+        "time": "June 27, 2025 at 05:14 AM"
       }
     },
     "movie": {
@@ -19,11 +19,11 @@
   },
   "videostr": {
     "anime": {
-      "key": "b09f18b647b5a9c2a532db4d58fbb0e89c4cabc822dff6e8b5ad1c6108900adb",
-      "hash": "b32ed686",
+      "key": "19030625a6fe1bd8c3c49e2a41cafa9eaa1b00717cb51df375f42b3b2cdfb01b",
+      "hash": "816a4290",
       "last_updated": {
-        "timestamp": 1750986136105,
-        "time": "June 27, 2025 at 01:02 AM"
+        "timestamp": 1751001255162,
+        "time": "June 27, 2025 at 05:14 AM"
       }
     },
     "movie": {
@@ -45,11 +45,11 @@
       }
     },
     "movie": {
-      "key": "mp1bmtrAgYGNODE2dgoTXIworHT1lVmbTSNwxEDknOFiFv5xLRmQ",
-      "hash": "d452e4aa",
+      "key": "LpPsBw6CDcZOnhdR24WpiourJIeg9bnjm5BETmpGlMRhmLgOwZpSAroL",
+      "hash": "86640005",
       "last_updated": {
-        "timestamp": 1750986136212,
-        "time": "June 27, 2025 at 01:02 AM"
+        "timestamp": 1751001255130,
+        "time": "June 27, 2025 at 05:14 AM"
       }
     }
   },
@@ -63,11 +63,11 @@
       }
     },
     "movie": {
-      "key": "mp1bmtrAgYGNODE2dgoTXIworHT1lVmbTSNwxEDknOFiFv5xLRmQ",
-      "hash": "d452e4aa",
+      "key": "LpPsBw6CDcZOnhdR24WpiourJIeg9bnjm5BETmpGlMRhmLgOwZpSAroL",
+      "hash": "86640005",
       "last_updated": {
-        "timestamp": 1750986136213,
-        "time": "June 27, 2025 at 01:02 AM"
+        "timestamp": 1751001255175,
+        "time": "June 27, 2025 at 05:14 AM"
       }
     }
   },
@@ -81,11 +81,11 @@
       }
     },
     "movie": {
-      "key": "mp1bmtrAgYGNODE2dgoTXIworHT1lVmbTSNwxEDknOFiFv5xLRmQ",
-      "hash": "d452e4aa",
+      "key": "LpPsBw6CDcZOnhdR24WpiourJIeg9bnjm5BETmpGlMRhmLgOwZpSAroL",
+      "hash": "86640005",
       "last_updated": {
-        "timestamp": 1750991783931,
-        "time": "June 27, 2025 at 02:36 AM"
+        "timestamp": 1751001254674,
+        "time": "June 27, 2025 at 05:14 AM"
       }
     }
   }
