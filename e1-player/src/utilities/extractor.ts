@@ -22,10 +22,13 @@ export async function extractKeyFromUrl(url : string) : Promise<string>
     })
 
     ctxGlobal.getSync('console').setSync('log', (...args: any[]) => {
-        // info(...args)
+        // info('[Console]', ...args)
     })
     ctxGlobal.getSync('console').setSync('error', (...args: any[]) => {
-        error(...args)
+        error('[Console]', ...args)
+    })
+    ctxGlobal.getSync('console').setSync('warn', (...args: any[]) => {
+        error('[Console]', ...args)
     })
 
 
@@ -43,7 +46,7 @@ export async function extractKeyFromUrl(url : string) : Promise<string>
 
     let cjsKey = ''
     ctxGlobal.getSync('CryptoJS').getSync('AES').setSync('decrypt', (cipherText : string, key : string) => {
-        console.log(`Found key for ${path.hostname} ${key}`)
+        info(`[${path.hostname.padEnd(17)}]`,'Key Found:', key)
         cjsKey = key
         isolate.dispose()
     })
