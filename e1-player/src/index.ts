@@ -9,10 +9,10 @@ process.chdir(__dirname)
 
 const baseUrls = [
     'https://megacloud.blog',
+    'https://streameeeeee.site',
     'https://videostr.net',
     'https://cloudvidz.net',
     'https://cdnstreame.net',
-    'https://streameeeeee.site'
 ]
 async function main()
 {
