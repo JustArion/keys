@@ -1,11 +1,11 @@
 {
   "megacloud": {
     "anime": {
-      "key": "bdbd9967c7e5f96eb19a687b17fc856b4e6eff4e00bd44dcf185232b47f4b445",
-      "hash": "9fc7ef66",
+      "key": "661006e8aa873bcc202bf8a8fec81ea54d66b86d417efc68413844c9e7bcbf52",
+      "hash": "293a19f4",
       "last_updated": {
-        "timestamp": 1751048250343,
-        "time": "June 27, 2025 at 06:17 PM"
+        "timestamp": 1751062334891,
+        "time": "June 27, 2025 at 10:12 PM"
       }
     },
     "movie": {
@@ -19,11 +19,11 @@
   },
   "videostr": {
     "anime": {
-      "key": "bdbd9967c7e5f96eb19a687b17fc856b4e6eff4e00bd44dcf185232b47f4b445",
-      "hash": "9fc7ef66",
+      "key": "661006e8aa873bcc202bf8a8fec81ea54d66b86d417efc68413844c9e7bcbf52",
+      "hash": "293a19f4",
       "last_updated": {
-        "timestamp": 1751048250802,
-        "time": "June 27, 2025 at 06:17 PM"
+        "timestamp": 1751062334928,
+        "time": "June 27, 2025 at 10:12 PM"
       }
     },
     "movie": {
@@ -45,11 +45,11 @@
       }
     },
     "movie": {
-      "key": "fdRsBndgn628nylZ8qQAkxJpphisXvgTeRbVgtuIXevK",
-      "hash": "3f274279",
+      "key": "z939m8kl9nWhEW8XYmgpbRXezN4CUTYjHS37xiNUJhwMrbAAOIW4tCaoleet",
+      "hash": "379b9772",
       "last_updated": {
-        "timestamp": 1751040935632,
-        "time": "June 27, 2025 at 04:15 PM"
+        "timestamp": 1751062334796,
+        "time": "June 27, 2025 at 10:12 PM"
       }
     }
   },
@@ -63,11 +63,11 @@
       }
     },
     "movie": {
-      "key": "fdRsBndgn628nylZ8qQAkxJpphisXvgTeRbVgtuIXevK",
-      "hash": "3f274279",
+      "key": "z939m8kl9nWhEW8XYmgpbRXezN4CUTYjHS37xiNUJhwMrbAAOIW4tCaoleet",
+      "hash": "379b9772",
       "last_updated": {
-        "timestamp": 1751040935853,
-        "time": "June 27, 2025 at 04:15 PM"
+        "timestamp": 1751062334937,
+        "time": "June 27, 2025 at 10:12 PM"
       }
     }
   },
@@ -81,11 +81,11 @@
       }
     },
     "movie": {
-      "key": "fdRsBndgn628nylZ8qQAkxJpphisXvgTeRbVgtuIXevK",
-      "hash": "3f274279",
+      "key": "z939m8kl9nWhEW8XYmgpbRXezN4CUTYjHS37xiNUJhwMrbAAOIW4tCaoleet",
+      "hash": "379b9772",
       "last_updated": {
-        "timestamp": 1751040935818,
-        "time": "June 27, 2025 at 04:15 PM"
+        "timestamp": 1751062334680,
+        "time": "June 27, 2025 at 10:12 PM"
       }
     }
   }
