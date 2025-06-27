@@ -70,5 +70,23 @@
         "time": "June 27, 2025 at 01:02 AM"
       }
     }
+  },
+  "streameeeeee": {
+    "anime": {
+      "key": "orayMf7Pg5Lnzdt7aBFgDtwD0MFE9p81Krdbe4Te8tWk0PtCFU6yOS0",
+      "hash": "d89eab09",
+      "last_updated": {
+        "timestamp": 1750991784024,
+        "time": "June 27, 2025 at 02:36 AM"
+      }
+    },
+    "movie": {
+      "key": "mp1bmtrAgYGNODE2dgoTXIworHT1lVmbTSNwxEDknOFiFv5xLRmQ",
+      "hash": "d452e4aa",
+      "last_updated": {
+        "timestamp": 1750991783931,
+        "time": "June 27, 2025 at 02:36 AM"
+      }
+    }
   }
 }
