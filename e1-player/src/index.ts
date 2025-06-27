@@ -12,6 +12,7 @@ const baseUrls = [
     'https://videostr.net',
     'https://cloudvidz.net',
     'https://cdnstreame.net',
+    'https://streameeeeee.site'
 ]
 async function main()
 {
