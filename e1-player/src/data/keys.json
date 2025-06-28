@@ -1,11 +1,11 @@
 {
   "megacloud": {
     "anime": {
-      "key": "2890ada6af69799fcf6cd693a74c90a2c2b448ef8fb85e7f53124a8a16e69c73",
-      "hash": "a7cf0e51",
+      "key": "48bdf54d9159cd3de6e9667894096dd1241e3bf312c88e999d5cf95fbf2d473b",
+      "hash": "ce842c4e",
       "last_updated": {
-        "timestamp": 1751108976642,
-        "time": "June 28, 2025 at 11:09 AM"
+        "timestamp": 1751123481192,
+        "time": "June 28, 2025 at 03:11 PM"
       }
     },
     "movie": {
@@ -19,11 +19,11 @@
   },
   "videostr": {
     "anime": {
-      "key": "2890ada6af69799fcf6cd693a74c90a2c2b448ef8fb85e7f53124a8a16e69c73",
-      "hash": "a7cf0e51",
+      "key": "48bdf54d9159cd3de6e9667894096dd1241e3bf312c88e999d5cf95fbf2d473b",
+      "hash": "ce842c4e",
       "last_updated": {
-        "timestamp": 1751108976778,
-        "time": "June 28, 2025 at 11:09 AM"
+        "timestamp": 1751123481740,
+        "time": "June 28, 2025 at 03:11 PM"
       }
     },
     "movie": {
@@ -45,11 +45,11 @@
       }
     },
     "movie": {
-      "key": "MPO7Aw2vNrqOTJlsHrLVdUAazXSM1V6XiqaLhbxWvd7",
-      "hash": "9da8853",
+      "key": "9fyQNT9Ncb06G2x5ist97P2Ar8i656sIwejR",
+      "hash": "3be5d207",
       "last_updated": {
-        "timestamp": 1751105535499,
-        "time": "June 28, 2025 at 10:12 AM"
+        "timestamp": 1751123481730,
+        "time": "June 28, 2025 at 03:11 PM"
       }
     }
   },
@@ -63,11 +63,11 @@
       }
     },
     "movie": {
-      "key": "MPO7Aw2vNrqOTJlsHrLVdUAazXSM1V6XiqaLhbxWvd7",
-      "hash": "9da8853",
+      "key": "9fyQNT9Ncb06G2x5ist97P2Ar8i656sIwejR",
+      "hash": "3be5d207",
       "last_updated": {
-        "timestamp": 1751105535534,
-        "time": "June 28, 2025 at 10:12 AM"
+        "timestamp": 1751123482031,
+        "time": "June 28, 2025 at 03:11 PM"
       }
     }
   },
@@ -81,11 +81,11 @@
       }
     },
     "movie": {
-      "key": "MPO7Aw2vNrqOTJlsHrLVdUAazXSM1V6XiqaLhbxWvd7",
-      "hash": "9da8853",
+      "key": "9fyQNT9Ncb06G2x5ist97P2Ar8i656sIwejR",
+      "hash": "3be5d207",
       "last_updated": {
-        "timestamp": 1751105535344,
-        "time": "June 28, 2025 at 10:12 AM"
+        "timestamp": 1751123481638,
+        "time": "June 28, 2025 at 03:11 PM"
       }
     }
   }
