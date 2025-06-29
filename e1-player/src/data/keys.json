@@ -1,11 +1,11 @@
 {
   "megacloud": {
     "anime": {
-      "key": "41881866c9ce14909b447710e6c518adfae0ef879bb06868fed16580ad28e80f",
-      "hash": "6be5e3e5",
+      "key": "705d243b043d3cae275bfc854c95639ad74d02d37c2a775f9e95ed8e5ec54b9b",
+      "hash": "4bcb542",
       "last_updated": {
-        "timestamp": 1751199733142,
-        "time": "June 29, 2025 at 12:22 PM"
+        "timestamp": 1751227990280,
+        "time": "June 29, 2025 at 08:13 PM"
       }
     },
     "movie": {
@@ -19,11 +19,11 @@
   },
   "videostr": {
     "anime": {
-      "key": "41881866c9ce14909b447710e6c518adfae0ef879bb06868fed16580ad28e80f",
-      "hash": "6be5e3e5",
+      "key": "705d243b043d3cae275bfc854c95639ad74d02d37c2a775f9e95ed8e5ec54b9b",
+      "hash": "4bcb542",
       "last_updated": {
-        "timestamp": 1751199733654,
-        "time": "June 29, 2025 at 12:22 PM"
+        "timestamp": 1751227990020,
+        "time": "June 29, 2025 at 08:13 PM"
       }
     },
     "movie": {
@@ -45,11 +45,11 @@
       }
     },
     "movie": {
-      "key": "HYSO8Xypo9aloCmT8PWjnxvycuWV6SD2er3n7Rl",
-      "hash": "3b4f6d23",
+      "key": "yvmRlReNwiaQHdYNQdSgviko8WIHDQPpkNYN1Glbh6YnRIvx4Lz",
+      "hash": "99036eb4",
       "last_updated": {
-        "timestamp": 1751203347435,
-        "time": "June 29, 2025 at 01:22 PM"
+        "timestamp": 1751227990304,
+        "time": "June 29, 2025 at 08:13 PM"
       }
     }
   },
@@ -63,11 +63,11 @@
       }
     },
     "movie": {
-      "key": "HYSO8Xypo9aloCmT8PWjnxvycuWV6SD2er3n7Rl",
-      "hash": "3b4f6d23",
+      "key": "yvmRlReNwiaQHdYNQdSgviko8WIHDQPpkNYN1Glbh6YnRIvx4Lz",
+      "hash": "99036eb4",
       "last_updated": {
-        "timestamp": 1751203347515,
-        "time": "June 29, 2025 at 01:22 PM"
+        "timestamp": 1751227990286,
+        "time": "June 29, 2025 at 08:13 PM"
       }
     }
   },
@@ -81,11 +81,11 @@
       }
     },
     "movie": {
-      "key": "HYSO8Xypo9aloCmT8PWjnxvycuWV6SD2er3n7Rl",
-      "hash": "3b4f6d23",
+      "key": "yvmRlReNwiaQHdYNQdSgviko8WIHDQPpkNYN1Glbh6YnRIvx4Lz",
+      "hash": "99036eb4",
       "last_updated": {
-        "timestamp": 1751203347435,
-        "time": "June 29, 2025 at 01:22 PM"
+        "timestamp": 1751227990156,
+        "time": "June 29, 2025 at 08:13 PM"
       }
     }
   }
