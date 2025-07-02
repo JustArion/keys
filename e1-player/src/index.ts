@@ -1,3 +1,5 @@
+#!/usr/bin/env -S npx ts-node 
+
 import { hash } from './utilities/cryptography'
 import { info, error, fatal } from './utilities/logging'
 import { Api as API } from './utilities/api'
