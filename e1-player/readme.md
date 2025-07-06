@@ -1,6 +1,12 @@
 ﻿### Requirements:
 - Node.js (v20.X)
 - pnpm
+    - (For Windows)
+      - Choco: `choco install pnpm`
+      - Scoop: `scoop install pnpm`
+      - npm: `npm install -g pnpm@latest-10`
+    - (For Linux)
+      - npm: `npm install -g pnpm@latest-10`
 
 ### Install & Run 
 ```
