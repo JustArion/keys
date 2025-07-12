@@ -1,4 +1,6 @@
-﻿### Requirements:
+﻿An example can be found [here](/e1-player/example.md)
+
+### Requirements:
 - Node.js (v20.X)
 - pnpm
     - (For Windows)
@@ -18,6 +20,6 @@ npx ts-node src/index.ts
 - Windows (x86_64)
 - Linux (x86_64)
 
-
+--- 
 - Testing on Linux/aarch64 `failed` for me.
 - Untested on Mac
