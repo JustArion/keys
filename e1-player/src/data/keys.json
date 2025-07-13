@@ -1,11 +1,11 @@
 {
   "megacloud": {
     "anime": {
-      "key": "b11a29aaafe7f7adea05f7e69a2ee3bcf6e5f3ecd0988a4be772f115298a4e65",
-      "hash": "9e9815cf",
+      "key": "1dbc6da80d3350dd4b206c7726e28bc41d2f5d1b8d5fb36e3c1ea7b16031949e",
+      "hash": "1dcee0b6",
       "last_updated": {
-        "timestamp": 1752401563286,
-        "time": "July 13, 2025 at 10:12 AM"
+        "timestamp": 1752419503566,
+        "time": "July 13, 2025 at 03:11 PM"
       }
     },
     "movie": {
@@ -19,11 +19,11 @@
   },
   "videostr": {
     "anime": {
-      "key": "b11a29aaafe7f7adea05f7e69a2ee3bcf6e5f3ecd0988a4be772f115298a4e65",
-      "hash": "9e9815cf",
+      "key": "1dbc6da80d3350dd4b206c7726e28bc41d2f5d1b8d5fb36e3c1ea7b16031949e",
+      "hash": "1dcee0b6",
       "last_updated": {
-        "timestamp": 1752401563418,
-        "time": "July 13, 2025 at 10:12 AM"
+        "timestamp": 1752419503913,
+        "time": "July 13, 2025 at 03:11 PM"
       }
     },
     "movie": {
